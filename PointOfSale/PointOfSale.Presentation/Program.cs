@@ -1,5 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PointOfSale.Data;
+using PointOfSale.Data.Enums;
+using PointOfSale.Presentation.Actions.OfferActions;
+using PointOfSale.Domain.Factories;
+using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Presentation
 {
