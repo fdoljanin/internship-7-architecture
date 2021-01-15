@@ -13,7 +13,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferDeleteAction:IAction
     {
         private readonly OfferRepository _offerRepository;
-        public string Label { get; set; } = "Add offer";
+        public string Label { get; set; } = "Delete offer";
 
         public OfferDeleteAction(OfferRepository offerRepository)
         {

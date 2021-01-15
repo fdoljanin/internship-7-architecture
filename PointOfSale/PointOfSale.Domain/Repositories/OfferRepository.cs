@@ -14,12 +14,12 @@ namespace PointOfSale.Domain.Repositories
 
         public bool CheckUnique(string name)
         {
-            return DbContext.Offers.Count(o => o.Name.ToLower() == name.ToLower() && o.IsActive == true)==0;
+            return !DbContext.Offers.Any(o => o.Name.ToLower() == name.ToLower() && o.IsActive);
         }
 
         public Offer FindByName(string name)
         {
-            return DbContext.Offers.Where(o => o.Name == name).ToList()[0];
+            return DbContext.Offers.Where(o => o.Name == name && o.IsActive).ToList()[0];
         }
 
         public void Add(Offer offer)
@@ -41,6 +41,11 @@ namespace PointOfSale.Domain.Repositories
             var offerToDelete = DbContext.Offers.First(o => o.Name.ToLower() == name.ToLower() && o.IsActive);
             offerToDelete.IsActive = false;
             SaveChanges();
+        }
+
+        public Offer Find(int offerId)
+        {
+            return DbContext.Offers.Find(offerId);
         }
 
         public ICollection<Offer> GetAll()

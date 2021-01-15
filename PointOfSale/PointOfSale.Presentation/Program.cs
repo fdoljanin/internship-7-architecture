@@ -5,6 +5,8 @@ using PointOfSale.Data.Enums;
 using PointOfSale.Presentation.Actions.OfferActions;
 using PointOfSale.Domain.Factories;
 using PointOfSale.Domain.Repositories;
+using PointOfSale.Presentation.Actions.CategoryActions;
+using PointOfSale.Presentation.Actions.OfferCategoryActions;
 
 namespace PointOfSale.Presentation
 {

@@ -23,5 +23,13 @@ namespace PointOfSale.Presentation.Helpers
             foreach (var offer in offers)
                 PrintOffer(offer);
         }
+
+        public static void PrintCategories(ICollection<Category> categories)
+        {
+            foreach (var category in categories)
+            {
+                Console.WriteLine(category.Name);
+            }
+        }
     }
 }

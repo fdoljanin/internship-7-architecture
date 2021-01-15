@@ -14,7 +14,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferEditAction : IAction
     {
         private readonly OfferRepository _offerRepository;
-        public string Label { get; set; } = "Add offer";
+        public string Label { get; set; } = "Edit offer";
 
         public OfferEditAction(OfferRepository offerRepository)
         {
@@ -42,7 +42,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             offerEdited.Name = notDefault ? newName : offerToEdit.Name;
             
 
-            message = $"Enter new price which is positive, enter for default {offerToEdit.Price}:";
+            message = $"Enter new price which is positive, enter for default ({offerToEdit.Price}):";
             notDefault = ReadHelpers.TryDecimalParse(message, out var newPrice, 0);
             offerEdited.Price = notDefault ? newPrice : offerToEdit.Price;
 
