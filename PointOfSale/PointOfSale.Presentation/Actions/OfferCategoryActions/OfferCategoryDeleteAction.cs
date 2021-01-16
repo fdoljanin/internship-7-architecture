@@ -15,40 +15,49 @@ namespace PointOfSale.Presentation.Actions.OfferCategoryActions
     {
         private readonly OfferCategoryRepository _offerCategoryRepository;
         private readonly CategoryRepository _categoryRepository;
+        private readonly OfferCategoryHelpers _offerCategoryHelper;
+        private readonly CategoryReadHelpers _categoryReadHelper;
         private readonly OfferRepository _offerRepository;
         public string Label { get; set; } = "Delete offer from category";
 
-        public OfferCategoryDeleteAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository, 
+        public OfferCategoryDeleteAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository,
             OfferRepository offerRepository)
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;
             _offerRepository = offerRepository;
+            _offerCategoryHelper = new OfferCategoryHelpers(offerRepository);
+            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
+            var doesContinue = true;
             PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            var message = "Enter name of category you want to delete from:";
-            var doesContinue = CategoryReadHelpers.TryGetName(message, _categoryRepository, false, out var categoryName);
+            Console.WriteLine("Enter name of category you want to delete from:");
+            var categoryName = _categoryReadHelper.TryGetName(false, ref doesContinue);
             if (!doesContinue) return;
 
-            var categoryPrint = _categoryRepository.FindFullByName(categoryName);
-            foreach (var offerId in categoryPrint.OfferCategories.Select(oc => oc.OfferId))
+            var categoryToPrint = _categoryRepository.FindFullByName(categoryName);
+            foreach (var offerId in 
+                categoryToPrint.OfferCategories.Select(oc => oc.OfferId))
             {
                 PrintHelpers.PrintOffer(_offerRepository.Find(offerId));
             }
-            message = $"Enter name of offer you want to delete from {categoryPrint.Name}:";
 
+            Console.WriteLine($"Enter name of offer you want to delete from {categoryToPrint.Name}:");
+
+            var category = _categoryRepository.FindFullByName(categoryName);
             while (true)
             {
-                var category = _categoryRepository.FindFullByName(categoryName);
-                Console.WriteLine(category.OfferCategories.Count);
-                doesContinue = OfferCategoryHelpers.TryGetOfferNameIfUnique
-                    (message, _offerRepository, true, category.OfferCategories, out var offerId);
+                var offerId = _offerCategoryHelper.TryGetOfferId
+                    (true, category.OfferCategories, ref doesContinue);
                 if (!doesContinue) return;
 
                 _offerCategoryRepository.Delete(offerId, category.Id);
+
+                var del = category.OfferCategories.First(oc => oc.OfferId == offerId && oc.CategoryId == category.Id); //weird but works, fix later
+                category.OfferCategories.Remove(del);
             }
         }
     }

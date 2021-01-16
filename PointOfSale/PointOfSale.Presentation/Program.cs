@@ -14,6 +14,9 @@ namespace PointOfSale.Presentation
     {
         static void Main(string[] args)
         {
+
+
+
         }
     }
 }

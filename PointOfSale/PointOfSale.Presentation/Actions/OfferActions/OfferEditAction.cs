@@ -14,37 +14,37 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferEditAction : IAction
     {
         private readonly OfferRepository _offerRepository;
+        private readonly OfferReadHelpers _offerReadHelper;
         public string Label { get; set; } = "Edit offer";
 
         public OfferEditAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
+            _offerReadHelper = new OfferReadHelpers(offerRepository);
         }
 
         public void Call()
         {
-            string message;
+            var isNotBlank = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
             Console.WriteLine("");
 
             var offerEdited = new Offer();
 
-            message = "Enter name of the offer:";
-            var doesContinue =
-                OfferReadHelpers.TryGetName(message, _offerRepository, false, out var name);
-            if (!doesContinue) return;
+            Console.WriteLine("Enter name of the offer:");
+            var name = _offerReadHelper.TryGetName(false, ref isNotBlank);
+            if (!isNotBlank) return;
             var offerToEdit = _offerRepository.FindByName(name);
 
-            message = $"Enter new name of the offer, enter for default ({offerToEdit.Name}):";
-            var notDefault =
-                OfferReadHelpers.TryGetName(message, _offerRepository, true, out var newName);
-            offerEdited.Name = notDefault ? newName : offerToEdit.Name;
-            
+            Console.WriteLine($"Enter new name of the offer, enter for default ({offerToEdit.Name}):");
+            var newName = _offerReadHelper.TryGetName(true, ref isNotBlank);
+            offerEdited.Name = isNotBlank ? newName : offerToEdit.Name;
 
-            message = $"Enter new price which is positive, enter for default ({offerToEdit.Price}):";
-            notDefault = ReadHelpers.TryDecimalParse(message, out var newPrice, 0);
-            offerEdited.Price = notDefault ? newPrice : offerToEdit.Price;
+
+            Console.WriteLine($"Enter new price which is positive, enter for default ({offerToEdit.Price}):");
+            var newPrice = ReadHelpers.TryDecimalParse(ref isNotBlank, 0);
+            offerEdited.Price = isNotBlank ? newPrice : offerToEdit.Price;
 
             _offerRepository.Edit(offerToEdit.Id, offerEdited);
             Console.WriteLine("Offer edited!");

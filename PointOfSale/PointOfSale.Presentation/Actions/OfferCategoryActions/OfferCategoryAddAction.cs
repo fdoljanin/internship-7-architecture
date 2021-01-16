@@ -15,7 +15,8 @@ namespace PointOfSale.Presentation.Actions.OfferCategoryActions
     {
         private readonly OfferCategoryRepository _offerCategoryRepository;
         private readonly CategoryRepository _categoryRepository;
-        private readonly OfferRepository _offerRepository;
+        private readonly OfferCategoryHelpers _offerCategoryHelper;
+        private readonly CategoryReadHelpers _categoryReadHelper;
         public string Label { get; set; } = "Add offer in category";
 
         public OfferCategoryAddAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository, 
@@ -23,22 +24,26 @@ namespace PointOfSale.Presentation.Actions.OfferCategoryActions
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;
-            _offerRepository = offerRepository;
+            _offerCategoryHelper = new OfferCategoryHelpers(offerRepository);
+            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
+            var doesContinue = true;
             PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            var message = "Enter name of category you want to add offer into:";
-            var doesContinue = CategoryReadHelpers.TryGetName(message, _categoryRepository, false, out var categoryName);
+            Console.WriteLine("Enter name of category you want to add offer into:");
+            var categoryName = _categoryReadHelper.TryGetName(false, ref doesContinue);
             if (!doesContinue) return;
+
+            //maybe show list of offers that aren't in?
 
             while (true)
             {
                 var category = _categoryRepository.FindFullByName(categoryName);
-                message = $"Enter name of offer you want to add into {category.Name}:";
-                doesContinue = OfferCategoryHelpers.TryGetOfferNameIfUnique
-                    (message, _offerRepository, false, category.OfferCategories, out var offerId);
+                Console.WriteLine($"Enter name of offer you want to add into {category.Name}:");
+                var offerId = _offerCategoryHelper.TryGetOfferId
+                    (false, category.OfferCategories, ref doesContinue);
                 if (!doesContinue) return;
 
                 _offerCategoryRepository.Add(

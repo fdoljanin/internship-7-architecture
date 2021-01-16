@@ -14,17 +14,21 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     public class CategoryAddAction : IAction
     {
         private readonly CategoryRepository _categoryRepository;
+        private readonly CategoryReadHelpers _categoryReadHelper;
         public string Label { get; set; } = "Add Category";
 
-        public CategoryAddAction(CategoryRepository CategoryRepository)
+        public CategoryAddAction(CategoryRepository categoryRepository)
         {
-            _categoryRepository = CategoryRepository;
+            _categoryRepository = categoryRepository;
+            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
-            var message = "Enter category name:";
-            var doesContinue = CategoryReadHelpers.TryGetName(message, _categoryRepository, true, out var name);
+            bool doesContinue = true;
+
+            Console.WriteLine("Enter category name:");
+            var name = _categoryReadHelper.TryGetName( true, ref doesContinue);
             if (!doesContinue) return;
             _categoryRepository.Add(
                 new Category()

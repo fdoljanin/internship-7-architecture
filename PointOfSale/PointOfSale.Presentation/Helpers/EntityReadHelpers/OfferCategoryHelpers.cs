@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
-    public static class OfferCategoryHelpers
+    public class OfferCategoryHelpers
     {
-        public static bool TryGetOfferNameIfUnique(string message, OfferRepository offerRepository, bool needExisting,
-            ICollection<OfferCategory> offersInCategory, out int offerId)
+        private readonly OfferRepository _offerRepository;
+        private readonly OfferReadHelpers _offerReadHelper;
+
+        public OfferCategoryHelpers(OfferRepository offerRepository)
         {
-            offerId = default;
+            _offerRepository = offerRepository;
+            _offerReadHelper = new OfferReadHelpers(offerRepository);
+        }
+
+        public int TryGetOfferId(bool needExisting, ICollection<OfferCategory> offersInCategory, ref bool doesContinue)
+        {
             while (true)
             {
-                var doesContinue = OfferReadHelpers.TryGetName(message, offerRepository, false, out var offerName);
-                if (!doesContinue) return false;
-                var findOfferId = offerRepository.FindByName(offerName).Id;
-                offerId = findOfferId;
-                if (offersInCategory.Any(oc => oc.OfferId == findOfferId) == needExisting)
-                    return true;
+                var offerName = _offerReadHelper.TryGetName(false, ref doesContinue);
+                if (!doesContinue) return default;
+                var offerId = _offerRepository.FindByName(offerName).Id;
+                if (offersInCategory.Any(oc => oc.OfferId == offerId) == needExisting)
+                    return offerId;
 
                 Console.WriteLine(needExisting ? $"Offer should be in category!" : "Offer is already there!");
             }

@@ -22,6 +22,11 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Offers.Where(o => o.Name == name && o.IsActive).ToList()[0];
         }
 
+        public Offer FindFullByName(string name)
+        {
+            return DbContext.Offers.Include(o=>o.OfferCategories).First(o => o.Name == name && o.IsActive);
+        }
+
         public void Add(Offer offer)
         {
             DbContext.Offers.Add(offer);

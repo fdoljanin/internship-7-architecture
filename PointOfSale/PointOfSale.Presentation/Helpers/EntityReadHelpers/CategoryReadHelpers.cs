@@ -7,17 +7,22 @@ using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
-    public static class CategoryReadHelpers
+    public class CategoryReadHelpers
     {
-        public static bool TryGetName(string message, CategoryRepository repository, bool needUnique, out string name)
+        private readonly CategoryRepository _categoryRepository;
+
+        public CategoryReadHelpers(CategoryRepository categoryRepository)
         {
-            while (true) //I will merge this with offerhelper
+            _categoryRepository = categoryRepository;
+        }
+        public string TryGetName(bool needUnique, ref bool doesContinue) //merge later
+        {
+            while (true)
             {
-                var doesContinue = ReadHelpers.DoesContinue(message, out var inputName);
-                var unique = repository.CheckUnique(inputName);
-                name = inputName;
-                if (!doesContinue) return false;
-                if (unique == needUnique) return true;
+                doesContinue = ReadHelpers.DoesContinue(out var name);
+                if (!doesContinue) return null;
+                var unique = _categoryRepository.CheckUnique(name);
+                if (unique == needUnique) return name;
                 Console.WriteLine(needUnique ? "Name needs to be unique!" : "Category with that name does not exist!");
             }
         }

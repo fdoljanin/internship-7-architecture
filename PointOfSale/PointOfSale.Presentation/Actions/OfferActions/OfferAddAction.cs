@@ -17,31 +17,41 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferAddAction : IAction
     {
         private readonly OfferRepository _offerRepository;
+        private readonly OfferReadHelpers _offerReadHelper; 
         public string Label { get; set; } = "Add offer";
 
         public OfferAddAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
+            _offerReadHelper = new OfferReadHelpers(offerRepository);
         }
         public void Call()
         {
-            var doesContinue = ReadHelpers.TryEnumParse<OfferType>("Enter type (Item, Service, Rent):", out var offerType);
+            var doesContinue = true;
+
+            Console.WriteLine("Enter type (Item, Service, Rent):");
+            var type = ReadHelpers.TryEnumParse<OfferType>(ref doesContinue);
             if (!doesContinue) return;
-            doesContinue = OfferReadHelpers.TryGetName("Enter name of product:", _offerRepository, true, out var name);
+
+            Console.WriteLine("Enter name of product:");
+            var name = _offerReadHelper.TryGetName(true, ref doesContinue);
             if (!doesContinue) return;
-            doesContinue = ReadHelpers.TryDecimalParse("Enter price, which is not negative:", out var price, 0);
+
+            Console.WriteLine("Enter price, which is not negative:");
+            var price = ReadHelpers.TryDecimalParse(ref doesContinue, 0);
             if (!doesContinue) return;
+
             var quantity = -1;
-            if (offerType != OfferType.Service)
+            if (type != OfferType.Service)
             {
-                doesContinue = ReadHelpers.TryIntParse("Enter quantity, which is not negative:", out var inQuantity, 0);
+                Console.WriteLine("Enter quantity, which is not negative:");
+                quantity = ReadHelpers.TryIntParse(ref doesContinue, 0);
                 if (!doesContinue) return;
-                quantity = inQuantity;
             }
             _offerRepository.Add(
                 new Offer()
                 {
-                    Type = offerType,
+                    Type = type,
                     Name = name,
                     Price = price,
                     Quantity = quantity,

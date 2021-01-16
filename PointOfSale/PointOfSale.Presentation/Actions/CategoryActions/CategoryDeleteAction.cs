@@ -13,18 +13,21 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     public class CategoryDeleteAction : IAction
     {
         private readonly CategoryRepository _categoryRepository;
+        private readonly CategoryReadHelpers _categoryReadHelper;
         public string Label { get; set; } = "Delete Category";
 
-        public CategoryDeleteAction(CategoryRepository CategoryRepository)
+        public CategoryDeleteAction(CategoryRepository categoryRepository)
         {
-            _categoryRepository = CategoryRepository;
+            _categoryRepository = categoryRepository;
+            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
+            var doesContinue = true;
             PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            var message = "Enter name of category you want to delete:";
-            var doesContinue = CategoryReadHelpers.TryGetName(message, _categoryRepository, false, out var name);
+            Console.WriteLine("Enter name of category you want to delete:");
+            var name = _categoryReadHelper.TryGetName(false, ref doesContinue);
             if (!doesContinue) return;
             if (!ReadHelpers.Confirm($"Are you sure you want to delete category {name}?")) return;
             _categoryRepository.Delete(name);

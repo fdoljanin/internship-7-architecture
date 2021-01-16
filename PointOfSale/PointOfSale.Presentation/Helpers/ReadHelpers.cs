@@ -10,57 +10,54 @@ namespace PointOfSale.Presentation.Helpers
 {
     public static class ReadHelpers
     {
-        public static bool DoesContinue(string message, out string input)
+        public static bool DoesContinue(out string input)
         {
-            Console.WriteLine(message);
             input = Console.ReadLine().Trim();
             return input != "";
         }
 
-        public static bool TryIntParse(string message, out int number, int lowerBound = int.MinValue)
+        public static int TryIntParse(ref bool doesContinue, int lowerBound = int.MinValue)
         {
             while (true)
             {
-                var doesContinue = DoesContinue(message, out var input);
-                var doesParse = int.TryParse(input, out var intInput);
-                number = intInput;
+                doesContinue = DoesContinue(out var input);
+                var doesParse = int.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound))
                 {
                     Console.WriteLine("Input not valid!");
                     continue;
                 }
-                return doesContinue;
+                return number;
             }
         }
-        public static bool TryDecimalParse(string message, out decimal number, decimal lowerBound = decimal.MinValue)
+        public static decimal TryDecimalParse(ref bool doesContinue, decimal lowerBound = decimal.MinValue)
         {
             while (true)
             {
-                var doesContinue = DoesContinue(message, out var input);
-                var doesParse = decimal.TryParse(input, out var decimalInput);
-                number = decimalInput;
+                doesContinue = DoesContinue(out var input);
+                var doesParse = decimal.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound))
                 {
                     Console.WriteLine("Input not valid!");
                     continue;
                 }
-                return doesContinue;
+                return number;
             }
         }
 
-        public static bool TryEnumParse<TEnum>(string message, out TEnum inputEnum) where TEnum:Enum
+
+        public static TEnum TryEnumParse<TEnum>(ref bool doesContinue)
         {
             while (true)
             {
-                var doesContinue = DoesContinue(message, out var input);
+                doesContinue = DoesContinue(out var input);
                 var doesParse = Enum.TryParse(typeof(TEnum), input.Capitalize(), out var result);
                 if (doesContinue && (!doesParse || int.TryParse(input, out _)))
                 {
                     Console.WriteLine("Input not valid!");
                     continue;
                 }
-                inputEnum = doesContinue ? (TEnum) result : default;
-                return doesContinue;
+                return (TEnum) result;
             }
         }
 
@@ -72,6 +69,47 @@ namespace PointOfSale.Presentation.Helpers
             if (input == "no") return false;
             Console.WriteLine("Input is not valid, choose yes/no!");
             return Confirm(message);
+        }
+
+        public static bool IsPinValid(string pin)
+        {
+            foreach (var digit in pin)
+            {
+                if (!"0123456789".Contains(digit))
+                    return false;
+            }
+            return true;
+        }
+
+        public static (int start, int end) GetWorkingHours(int min, int max, ref bool continues)
+        {
+            while (true)
+            {
+                continues = DoesContinue(out var input);
+                if (!continues) return (-1, -1);
+                var hours = input.Split();
+                var doesParse = int.TryParse(hours[0], out var workStart);
+                doesParse = int.TryParse(hours[1], out var workEnd);
+                if (!doesParse || hours.Length != 2)
+                {
+                    Console.WriteLine("Please enter in right format!");
+                    continue;
+                }
+
+                if (workStart < 0 || workEnd > 24)
+                {
+                    Console.WriteLine("Day has 24 hours!");
+                    continue;
+                }
+
+                if (workEnd >= workStart)
+                {
+                    Console.WriteLine("End should be after start!");
+                }
+
+                return (workEnd, workStart);
+
+            }
         }
     }
 }
