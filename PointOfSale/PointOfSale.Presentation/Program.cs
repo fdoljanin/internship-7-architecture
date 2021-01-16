@@ -7,6 +7,8 @@ using PointOfSale.Domain.Factories;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Actions.CategoryActions;
 using PointOfSale.Presentation.Actions.OfferCategoryActions;
+using PointOfSale.Presentation.Actions.CustomerActions;
+using PointOfSale.Presentation.Actions.EmployeeActions;
 
 namespace PointOfSale.Presentation
 {
@@ -14,9 +16,6 @@ namespace PointOfSale.Presentation
     {
         static void Main(string[] args)
         {
-
-
-
         }
     }
 }

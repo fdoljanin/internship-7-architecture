@@ -1,4 +1,5 @@
-﻿using PointOfSale.Data.Entities;
+﻿using System.Collections.Generic;
+using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
@@ -20,6 +21,26 @@ namespace PointOfSale.Domain.Repositories
         public void Add(Customer customer)
         {
             DbContext.Customers.Add(customer);
+            SaveChanges();
+        }
+
+        public void Edit(int id, Customer editedCustomer)
+        {
+            var customerToEdit = DbContext.Customers.First(c => c.Id == id);
+            customerToEdit.Pin = editedCustomer.Pin;
+            customerToEdit.FirstName = editedCustomer.FirstName;
+            customerToEdit.LastName = editedCustomer.LastName;
+            SaveChanges();
+        }
+
+        public ICollection<Customer> GetAll()
+        {
+            return DbContext.Customers.ToList();
+        }
+
+        public Customer GetByPin(string pin)
+        {
+            return DbContext.Customers.First(c => c.Pin == pin);
         }
     }
 }

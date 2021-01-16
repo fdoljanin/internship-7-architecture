@@ -81,33 +81,40 @@ namespace PointOfSale.Presentation.Helpers
             return true;
         }
 
-        public static (int start, int end) GetWorkingHours(int min, int max, ref bool continues)
+        public static (int start, int end) TryGetWorkingHours(int min, int max, ref bool continues)
         {
             while (true)
             {
                 continues = DoesContinue(out var input);
                 if (!continues) return (-1, -1);
                 var hours = input.Split();
-                var doesParse = int.TryParse(hours[0], out var workStart);
-                doesParse = int.TryParse(hours[1], out var workEnd);
-                if (!doesParse || hours.Length != 2)
+                if (hours.Length != 2)
                 {
                     Console.WriteLine("Please enter in right format!");
                     continue;
                 }
 
-                if (workStart < 0 || workEnd > 24)
+                var doesParse = int.TryParse(hours[0], out var workStart);
+                doesParse = int.TryParse(hours[1], out var workEnd);
+                if (!doesParse)
                 {
-                    Console.WriteLine("Day has 24 hours!");
+                    Console.WriteLine("Please enter a number!");
                     continue;
                 }
 
-                if (workEnd >= workStart)
+                if (workStart < min || workEnd > max)
                 {
-                    Console.WriteLine("End should be after start!");
+                    Console.WriteLine("Hours not valid!");
+                    continue;
                 }
 
-                return (workEnd, workStart);
+                if (workEnd < workStart)
+                {
+                    Console.WriteLine("End should be after start!");
+                    continue;
+                }
+
+                return (workStart, workEnd);
 
             }
         }

@@ -38,7 +38,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
             if (!doesContinue) return;
 
             Console.WriteLine("Enter start (inclusive) and end (exclusive) of 24h work day in format hh hh:");
-            var workTime = ReadHelpers.GetWorkingHours(0, 24, ref doesContinue);
+            var workTime = ReadHelpers.TryGetWorkingHours(0, 24, ref doesContinue);
             if (!doesContinue) return;
 
 

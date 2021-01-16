@@ -28,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             var isNotBlank = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
-            Console.WriteLine("");
+            Console.WriteLine();
 
             var offerEdited = new Offer();
 

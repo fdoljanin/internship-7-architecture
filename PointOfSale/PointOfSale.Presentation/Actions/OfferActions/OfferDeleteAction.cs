@@ -28,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             var doesContinue = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
-            Console.WriteLine("");
+            Console.WriteLine();
 
             Console.WriteLine("Enter name of the offer to delete:");
             var name = _offerReadHelper.TryGetName(false, ref doesContinue);
