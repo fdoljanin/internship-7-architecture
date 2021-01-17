@@ -16,13 +16,13 @@ namespace PointOfSale.Presentation.Helpers
             return input != "";
         }
 
-        public static int TryIntParse(ref bool doesContinue, int lowerBound = int.MinValue)
+        public static int TryIntParse(ref bool doesContinue, int lowerBound = int.MinValue, int upperBound = int.MaxValue)
         {
             while (true)
             {
                 doesContinue = DoesContinue(out var input);
                 var doesParse = int.TryParse(input, out var number);
-                if (doesContinue && (!doesParse || number < lowerBound))
+                if (doesContinue && (!doesParse || number < lowerBound || number > upperBound))
                 {
                     Console.WriteLine("Input not valid!");
                     continue;

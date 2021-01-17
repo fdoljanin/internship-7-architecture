@@ -21,62 +21,80 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             _serviceBillRepository = serviceBillRepository;
             _employeeRepository = employeeRepository;
         }
-        public string TryGetService(ref bool doesContinue)
+
+        private string TryGetServiceName(ref bool doesContinue)
         {
-            string serviceName;
             while (true)
             {
-                Console.WriteLine("Enter service name:");
-                doesContinue = ReadHelpers.DoesContinue(out var serviceNameOut);
+                doesContinue = ReadHelpers.DoesContinue(out var serviceName);
                 if (!doesContinue) return null;
-                if (!_serviceBillRepository.DoesExist(serviceNameOut))
+                if (_serviceBillRepository.DoesExist(serviceName)) return serviceName;
+                Console.WriteLine("Service does not exist!");
+            }
+        }
+
+        private (DateTime serviceStart, ICollection<Employee> availableEmployees) 
+            TryGetTime(int lengthInHours, ref bool doesContinue)
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter starting time in format dd.mm.yyyy. hh:mm:");
+                doesContinue = ReadHelpers.DoesContinue(out var input);
+                if (!doesContinue) return (default, default);
+
+                var doesParse = DateTime.TryParse(input, out var date);
+                if (!doesParse || date.Hour + lengthInHours > 23)
                 {
-                    Console.WriteLine("Service does not exist!");
+                    Console.WriteLine("Enter valid date! Enter for quit");
                     continue;
                 }
+                
+                var availableEmployees = _employeeRepository.GetAllAvailable(date, lengthInHours);
 
-                serviceName = serviceNameOut;
-                break;
+                if (availableEmployees.Count > 0) return (date, availableEmployees);
+
+                Console.WriteLine("No available employees! Enter for quit");
             }
+        }
 
-            Console.WriteLine("Enter service duration in hours");
-            var lengthInHours = ReadHelpers.TryIntParse(ref doesContinue, 1);
+        private string GetEmployeePin(ICollection<Employee> employees)
+        {
+            while (true)
+            {
+                var pin = Console.ReadLine().Trim();
+                if (employees.Any(e => e.Pin == pin)) return pin;
+                Console.WriteLine("PIN not valid!");
+            }
+        }
+
+        public ServiceBill TryGetService(ref bool doesContinue)
+        {
+            Console.WriteLine("Enter service name:");
+            var serviceName = TryGetServiceName(ref doesContinue);
             if (!doesContinue) return null;
 
-            ICollection<Employee> availableEmployees;
-            while (true)
-            {
-                Console.WriteLine("Enter starting time:");
-                var doesParse = DateTime.TryParse(Console.ReadLine(), out var date);
-                if (!doesParse)
-                {
-                    Console.WriteLine("Enter valid date!");
-                    continue;
-                }
+            Console.WriteLine("Enter service duration in hours:");
+            var durationInHours = ReadHelpers.TryIntParse(ref doesContinue, 1, 23);
+            if (!doesContinue) return null;
 
-                availableEmployees = _employeeRepository.GetAllAvailable(date, lengthInHours);
-
-                if (availableEmployees.Count == 0)
-                {
-                    Console.WriteLine("No available employees!");
-                    continue;
-                }
-
-                break;
-            }
+            var doesRestart = false;
+            var (startTime, availableEmployees) = TryGetTime(durationInHours, ref doesRestart);
+            if (!doesRestart) return TryGetService(ref doesContinue);
 
             PrintHelpers.PrintPersonList(availableEmployees);
 
             Console.WriteLine("Enter employee PIN:");
-            string pin;
-            while (true)
-            {
-                pin = Console.ReadLine().Trim();
-                if (availableEmployees.Any(e => e.Pin == pin)) break;
-                Console.WriteLine("PIN not valid!");
-            }
+            var employeePin = GetEmployeePin(availableEmployees);
 
-            return "";
+            var serviceBill = new ServiceBill()
+            {
+                OfferId = _serviceBillRepository.FindByName(serviceName).Id,
+                EmployeeId = _employeeRepository.GetByPin(employeePin).Id,
+                StartTime = startTime,
+                Duration = durationInHours
+            };
+
+            return serviceBill;
         }
     }
 }

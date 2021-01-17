@@ -53,7 +53,8 @@ namespace PointOfSale.Domain.Repositories
             var end = start.AddHours(length);
             return DbContext.Employees.Include(e => e.ServiceBills)
                 .Where(e => e.WorkStart <= start.Hour && e.WorkEnd * 60 >= end.Hour*60 + end.Minute)
-                .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || start > sb.EndTime))
+                .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || 
+                                                     start > sb.StartTime.AddHours(sb.Duration)))
                 .ToList();
         }
     }
