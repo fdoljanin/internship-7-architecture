@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -45,6 +46,15 @@ namespace PointOfSale.Domain.Repositories
         public Employee GetByPin(string pin)
         {
             return DbContext.Employees.First(e => e.Pin == pin);
+        }
+
+        public ICollection<Employee> GetAllAvailable(DateTime start, int length)
+        {
+            var end = start.AddHours(length);
+            return DbContext.Employees.Include(e => e.ServiceBills)
+                .Where(e => e.WorkStart <= start.Hour && e.WorkEnd * 60 >= end.Hour*60 + end.Minute)
+                .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || start > sb.EndTime))
+                .ToList();
         }
     }
 }
