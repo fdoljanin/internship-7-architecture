@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -71,8 +72,18 @@ namespace PointOfSale.Domain.Repositories
 
             SaveChanges();
             return bill.Cost;
+        }
 
+        public ICollection<Bill> GetBills()
+        {
+            return DbContext.Bills.Where(b => !b.Cancelled).ToList();
+        }
 
+        public void CancelBill(int billId)
+        {
+            DbContext.Bills.Find(billId).Cancelled = true;
+            
+            SaveChanges();
         }
     }
 }

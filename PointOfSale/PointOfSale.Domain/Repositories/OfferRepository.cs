@@ -2,6 +2,7 @@
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Permissions;
 using PointOfSale.Data.Entities.Models;
 
 namespace PointOfSale.Domain.Repositories
@@ -56,6 +57,14 @@ namespace PointOfSale.Domain.Repositories
         public ICollection<Offer> GetAll()
         {
             return DbContext.Offers.Where(o=>o.IsActive).ToList();
+        }
+
+        public void ChangeQuantity(int offerId, int newQuantity)
+        {
+            var offerToEdit = DbContext.Offers.Find(offerId);
+            offerToEdit.Quantity = newQuantity;
+
+            SaveChanges();
         }
     }
 }

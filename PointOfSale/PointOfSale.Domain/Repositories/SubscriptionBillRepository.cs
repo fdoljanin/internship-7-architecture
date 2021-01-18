@@ -35,5 +35,26 @@ namespace PointOfSale.Domain.Repositories
             --subscriptionBill.Offer.Quantity;
             SaveChanges();
         }
+
+        public ICollection<SubscriptionBill> GetActiveSubscriptions()
+        {
+            return DbContext.SubscriptionBills
+                .Include(sb => sb.Offer)
+                .Include(sb => sb.Customer)
+                .Where(sb => sb.BillId == null)
+                .ToList();
+        }
+
+        public void CancelSubscription(int subscriptionId)
+        {
+            var subscriptionToCancel = DbContext.SubscriptionBills
+                .Include(sb => sb.Offer)
+                .First(sb => sb.Id == subscriptionId);
+            
+            subscriptionToCancel.Offer.Quantity++;
+            DbContext.SubscriptionBills.Remove(subscriptionToCancel);
+            
+            SaveChanges();
+        }
     }
 }

@@ -48,9 +48,9 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Employees.First(e => e.Pin == pin);
         }
 
-        public ICollection<Employee> GetAllAvailable(DateTime start, int length)
+        public ICollection<Employee> GetAllAvailable(DateTime start, int duration)
         {
-            var end = start.AddHours(length);
+            var end = start.AddHours(duration);
             return DbContext.Employees.Include(e => e.ServiceBills)
                 .Where(e => e.WorkStart <= start.Hour && e.WorkEnd * 60 >= end.Hour*60 + end.Minute)
                 .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || 

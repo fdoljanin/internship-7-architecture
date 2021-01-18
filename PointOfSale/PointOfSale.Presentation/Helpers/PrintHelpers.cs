@@ -48,5 +48,36 @@ namespace PointOfSale.Presentation.Helpers
                 Console.WriteLine(category.Name);
             }
         }
+
+        public static void PrintBill(Bill bill)
+        {
+            Console.WriteLine($"{bill.Type}\t\t{bill.TransactionDate}\t\t{bill.Cost}");
+        }
+
+        public static void PrintBills(ICollection<Bill> bills)
+        {
+            Console.WriteLine("TYPE\t\t\tDATE\t\t\t\tCOST");
+            for (var i = 1; i <= bills.Count; ++i)
+            {
+                Console.Write($"{i}. ");
+                PrintBill(bills.ElementAt(i-1));
+            }
+        }
+
+        public static void PrintSubscription(SubscriptionBill subscriptionBill)
+        {
+            Console.WriteLine($"{subscriptionBill.Offer.Name}\t\t\t{subscriptionBill.Customer.Pin}\t\t\t{subscriptionBill.StartTime}");
+        }
+
+        public static void PrintSubscriptions(ICollection<SubscriptionBill> subscriptionBills)
+        {
+            Console.WriteLine("OFFER NAME\t\t\tCUSTOMER PIN\t\t\tSTART DATE");
+            for (var i = 1; i <= subscriptionBills.Count; ++i)
+            {
+                Console.Write($"{i}. ");
+                PrintSubscription(subscriptionBills.ElementAt(i - 1));
+            }
+        }
+
     }
 }
