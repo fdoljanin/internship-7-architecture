@@ -17,7 +17,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             _articleBillRepository = articleBillRepository;
         }
 
-        public (string name, int quantity) TryGetNameAndQuantity(ref bool doesContinue)
+        private (string name, int quantity) TryGetNameAndQuantity(ref bool doesContinue)
         {
             while (true)
             {
@@ -48,6 +48,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             while (true)
             {
                 var (name, quantity) = TryGetNameAndQuantity(ref doesContinue);
+                if (!doesContinue) return default;
 
                 if (!_articleBillRepository.CheckDoesExist(name))
                 {

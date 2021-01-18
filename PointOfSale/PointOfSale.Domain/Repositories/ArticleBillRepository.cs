@@ -1,4 +1,5 @@
-﻿using PointOfSale.Data.Entities;
+﻿using System.Collections.Generic;
+using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
@@ -29,7 +30,23 @@ namespace PointOfSale.Domain.Repositories
             return article.Quantity >= quantity;
         }
 
+        public void Add(ArticleBill articleBill)
+        {
+            DbContext.ArticleBills.Add(articleBill);
+            DbContext.Offers.Find(articleBill.OfferId).Quantity -= articleBill.Quantity;
+            
+            SaveChanges();
+        }
 
+        public ICollection<Offer> GetAllAvailable()
+        {
+            return DbContext.Offers.Where(o => o.Type == OfferType.Item && o.Quantity >0 && o.IsActive).ToList();
+        }
+
+        public decimal GetPrice(int id)
+        {
+            return DbContext.Offers.Find(id).Price;
+        }
 
     }
 }
