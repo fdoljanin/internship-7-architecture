@@ -115,7 +115,51 @@ namespace PointOfSale.Presentation.Helpers
                 }
 
                 return (workStart, workEnd);
+            }
+        }
 
+        public static (DateTime start, DateTime end) GetDateRange(ref bool doesContinue)
+        {
+            while (true)
+            {
+                doesContinue = ReadHelpers.DoesContinue(out var input);
+                if (!doesContinue) return (default, default);
+                var dates = input.Split();
+
+                if (dates.Length == 2)
+                {
+                    var doesParse = DateTime.TryParse(dates[0], out var start);
+                    doesParse &= DateTime.TryParse(dates[1], out var end);
+
+                    if (doesParse && start < end) return (start, end);
+                    Console.WriteLine("Enter valid dates!");
+                    continue;
+                }
+
+                if (dates.Length == 1)
+                {
+                    var doesParse = DateTime.TryParse(dates[0], out var start);
+
+                    if (doesParse && start < DateTime.Now) return (start, DateTime.Now);
+                    Console.WriteLine("Enter valid date!");
+                }
+
+                Console.WriteLine("Input not valid!");
+            }
+        }
+
+        public static (int lowerBound, int upperBound) TryGetLessOrMore(ref bool doesContinue)
+        {
+            while (true)
+            {
+                doesContinue = ReadHelpers.DoesContinue(out var input);
+                if (!doesContinue) return (default, default);
+
+                var doesParse = int.TryParse(input.Substring(1), out var number);
+                if (input[0] == '>') return (number, int.MaxValue);
+                if (input[0] == '<') return (int.MinValue, number);
+
+                Console.WriteLine("Input not valid!");
             }
         }
     }

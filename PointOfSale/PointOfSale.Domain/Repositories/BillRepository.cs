@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading;
+using System.Xml.Serialization;
 using PointOfSale.Data.Entities.Models;
+using PointOfSale.Data.Enums;
 
 namespace PointOfSale.Domain.Repositories
 {
@@ -84,6 +87,47 @@ namespace PointOfSale.Domain.Repositories
             DbContext.Bills.Find(billId).Cancelled = true;
             
             SaveChanges();
+        }
+
+        public ICollection<Bill> GetCategoryReport(BillType billType, (DateTime start, DateTime end) range)
+        {
+            return DbContext.Bills
+                .Where(b => b.Type == billType && !b.Cancelled 
+                                               && b.TransactionDate >= range.start && b.TransactionDate <= range.end).ToList();
+        }
+
+        public ICollection<Bill> GetOfferTypeReport(OfferType offerType, (DateTime start, DateTime end) range)
+        {
+            Func<Bill, bool> dateFilter = b =>
+                (b.TransactionDate >= range.start && b.TransactionDate <= range.end);
+            Func<Bill, bool> typeFilter = default;
+
+            switch (offerType)
+            {
+                case OfferType.Service:
+                    typeFilter = b => b.ServiceBills.Count > 0;
+                    break;
+                case OfferType.Item:
+                    typeFilter = b => b.ArticleBills.Count > 0;
+                    break;
+                case OfferType.Rent:
+                    typeFilter = b => b.SubscriptionBills.Count > 0;
+                    break;
+            }
+
+            return DbContext.Bills
+                .Where(dateFilter)
+                .Where(typeFilter)
+                .Where(b => !b.Cancelled)
+                .ToList();
+        }
+
+        public decimal GetYearProfit(int year)
+        {
+            return DbContext.Bills
+                .Where(b => b.TransactionDate.Year == year && !b.Cancelled)
+                .ToList()
+                .Sum(b => b.Cost);
         }
     }
 }

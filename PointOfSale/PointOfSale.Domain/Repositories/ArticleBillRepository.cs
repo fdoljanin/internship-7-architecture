@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
+using PointOfSale.Domain.Models;
 
 namespace PointOfSale.Domain.Repositories
 {
@@ -46,6 +48,24 @@ namespace PointOfSale.Domain.Repositories
         public decimal GetPrice(int id)
         {
             return DbContext.Offers.Find(id).Price;
+        }
+
+        public ICollection<CountByCategory> GetCountByCategory()
+        {
+            var offerCategories = DbContext.OfferCategories
+                .Where(oc => oc.Offer.Type == OfferType.Item)
+                .Include(oc => oc.Category)
+                .Include(oc => oc.Offer)
+                .ThenInclude(o => o.ArticleBills.Where(ab => !ab.Bill.Cancelled))
+                .ToList();
+
+            return offerCategories.GroupBy(oc => oc.Category)
+                .Select(g => new CountByCategory()
+                {
+                    Name = g.Key.Name,
+                    Count = g.Sum(g => g.Offer.ArticleBills.Sum(ab => ab.Quantity))
+                })
+                .ToList();
         }
 
     }

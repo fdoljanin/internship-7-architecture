@@ -13,7 +13,7 @@ namespace PointOfSale.Presentation.Helpers
         public static void PrintOffer(Offer offer)
         {
             Console.Write($"{offer.Type}\t\t{offer.Name}\t\t{offer.Price}\t\t");
-            if (offer.Type != OfferType.Service) Console.Write(offer.Quantity);
+            if (offer.Quantity != null) Console.Write(offer.Quantity);
             Console.WriteLine();
         }
 
