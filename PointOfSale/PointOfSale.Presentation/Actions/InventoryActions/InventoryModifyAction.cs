@@ -15,6 +15,12 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
     {
         private readonly OfferRepository _offerRepository;
         private readonly OfferReadHelpers _offerReadHelper;
+
+        public InventoryModifyAction(OfferRepository offerRepository)
+        {
+            _offerRepository = offerRepository;
+            _offerReadHelper = new OfferReadHelpers(offerRepository);
+        }
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Modify inventory";
 

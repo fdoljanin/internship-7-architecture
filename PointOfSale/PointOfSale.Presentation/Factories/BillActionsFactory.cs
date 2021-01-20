@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using PointOfSale.Domain.Factories;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Actions;
 using PointOfSale.Presentation.Actions.BillActions;
+using PointOfSale.Presentation.Actions.SubscriptionActions;
 
 namespace PointOfSale.Presentation.Factories
 {
@@ -14,7 +16,7 @@ namespace PointOfSale.Presentation.Factories
     {
         public static BillParentAction GetBillParentAction()
         {
-            var billActions = new List<IAction>
+            var actions = new List<IAction>
             {
                 new OneOffBillAction
                 (
@@ -22,9 +24,23 @@ namespace PointOfSale.Presentation.Factories
                     RepositoryFactory.GetRepository<ArticleBillRepository>(),
                     RepositoryFactory.GetRepository<ServiceBillRepository>(),
                     RepositoryFactory.GetRepository<EmployeeRepository>()
-                 ),
+                ),
+                new ServiceBillAction(
+                    RepositoryFactory.GetRepository<ServiceBillRepository>(),
+                    RepositoryFactory.GetRepository<BillRepository>(),
+                    RepositoryFactory.GetRepository<EmployeeRepository>()
+                ),
+                new SubscriptionBillAction(
+                    RepositoryFactory.GetRepository<CustomerRepository>(),
+                    RepositoryFactory.GetRepository<BillRepository>()
+                ),
+                new CancelBill(
+                    RepositoryFactory.GetRepository<BillRepository>()
+                ),
+                new ExitMenuAction()
+            };
 
-            }
+            return new BillParentAction(actions);
         }
     }
 }

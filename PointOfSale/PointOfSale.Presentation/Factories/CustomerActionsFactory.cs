@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PointOfSale.Domain.Factories;
+using PointOfSale.Domain.Repositories;
+using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Actions;
 using PointOfSale.Presentation.Actions.CustomerActions;
 
 namespace PointOfSale.Presentation.Factories
@@ -11,7 +15,14 @@ namespace PointOfSale.Presentation.Factories
     {
         public static CustomerParentAction GetCustomerParentAction()
         {
+            var actions = new List<IAction>
+            {
+                new CustomerAddAction(RepositoryFactory.GetRepository<CustomerRepository>()),
+                new CustomerEditAction(RepositoryFactory.GetRepository<CustomerRepository>()),
+                new ExitMenuAction()
+            };
 
+            return new CustomerParentAction(actions);
         }
     }
 }
