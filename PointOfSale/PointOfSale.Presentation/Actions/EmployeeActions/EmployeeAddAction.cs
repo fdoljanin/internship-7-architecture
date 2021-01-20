@@ -15,6 +15,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
     {
         private readonly EmployeeRepository _employeeRepository;
         private readonly PersonReadHelpers _personReadHelper;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add Employee";
 
         public EmployeeAddAction(EmployeeRepository employeeRepository)

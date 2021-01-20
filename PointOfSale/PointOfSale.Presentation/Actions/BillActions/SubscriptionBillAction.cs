@@ -16,6 +16,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
         private readonly PersonReadHelpers _customerReadHelper;
         private readonly BillRepository _billRepository;
         private readonly CustomerRepository _customerRepository;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add subscription bill";
         public SubscriptionBillAction(CustomerRepository customerRepository, BillRepository billRepository)
         {

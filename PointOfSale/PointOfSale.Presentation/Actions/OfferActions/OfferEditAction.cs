@@ -15,6 +15,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     {
         private readonly OfferRepository _offerRepository;
         private readonly OfferReadHelpers _offerReadHelper;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit offer";
 
         public OfferEditAction(OfferRepository offerRepository)

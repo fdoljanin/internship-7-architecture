@@ -12,6 +12,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
     public class ReportInventoryQuantity:IAction
     {
         private readonly OfferRepository _offerRepository;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Get articles by quantity";
 
         public void Call()

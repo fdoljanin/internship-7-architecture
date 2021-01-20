@@ -12,6 +12,7 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
     public class SubscriptionDeleteAction:IAction
     {
         private readonly SubscriptionBillRepository _subscriptionBillRepository;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Cancel subscription";
 
         public SubscriptionDeleteAction(SubscriptionBillRepository subscriptionBillRepository)

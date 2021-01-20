@@ -15,6 +15,7 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
     {
         private readonly CustomerRepository _customerRepository;
         private readonly PersonReadHelpers _personReadHelper;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add Customer";
 
         public CustomerAddAction(CustomerRepository customerRepository)

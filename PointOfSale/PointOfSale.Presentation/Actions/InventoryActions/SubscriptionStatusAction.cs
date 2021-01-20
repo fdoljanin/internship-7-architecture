@@ -19,6 +19,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
             _subscriptionRepository = subscriptionRepository;
         }
 
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Subscription inventory status";
         public void Call()
         {

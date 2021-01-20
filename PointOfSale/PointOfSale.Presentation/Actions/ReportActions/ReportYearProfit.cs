@@ -17,6 +17,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             _billRepository = billRepository;
         }
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Get profit by year";
 
         public void Call()

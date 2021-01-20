@@ -17,6 +17,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             _subscriptionBillRepository = subscriptionBillRepository;
         }
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Get active subscriptions";
 
         public void Call()

@@ -25,6 +25,8 @@ namespace PointOfSale.Presentation.Actions.BillActions
             _serviceBillHelper = new ServiceBillHelpers(serviceBillRepository, employeeRepository);
             _billRepository = billRepository;
         }
+
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add service bill";
         public void Call()
         {

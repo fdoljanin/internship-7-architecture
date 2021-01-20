@@ -11,7 +11,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
 {
     public class ServiceStatusAction:IAction
     {
-
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Service status";
         private readonly EmployeeRepository _employeeRepository;
         public ServiceStatusAction(EmployeeRepository employeeRepository)

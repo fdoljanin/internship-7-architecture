@@ -16,6 +16,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             _articleBillRepository = articleBillRepository;
         }
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Get article by category";
         public void Call()
         {

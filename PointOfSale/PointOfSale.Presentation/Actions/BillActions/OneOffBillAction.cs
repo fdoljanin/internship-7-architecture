@@ -15,6 +15,8 @@ namespace PointOfSale.Presentation.Actions.BillActions
     public class OneOffBillAction:IAction
     {
         public string Label { get; set; } = "One-off bill";
+        public int MenuIndex { get; set; }
+
         private readonly BillRepository _billRepository;
         private readonly ArticleBillRepository _articleBillRepository;
         private readonly ServiceBillRepository _serviceBillRepository;

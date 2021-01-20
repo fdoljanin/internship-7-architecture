@@ -14,6 +14,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     {
         private readonly CategoryRepository _categoryRepository;
         private readonly CategoryReadHelpers _categoryReadHelper;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Delete Category";
 
         public CategoryDeleteAction(CategoryRepository categoryRepository)

@@ -17,6 +17,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             _offerRepository = offerRepository;
         }
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Show top 10 selling";
 
         public void Call()

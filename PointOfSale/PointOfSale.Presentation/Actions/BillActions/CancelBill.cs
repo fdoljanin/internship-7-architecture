@@ -13,6 +13,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
     public class CancelBill:IAction
     {
         private readonly BillRepository _billRepository;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Cancel bill";
 
         public CancelBill(BillRepository billRepository)

@@ -17,7 +17,8 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferAddAction : IAction
     {
         private readonly OfferRepository _offerRepository;
-        private readonly OfferReadHelpers _offerReadHelper; 
+        private readonly OfferReadHelpers _offerReadHelper;
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add offer";
 
         public OfferAddAction(OfferRepository offerRepository)

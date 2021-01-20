@@ -9,21 +9,25 @@ using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
 using PointOfSale.Presentation.Helpers.EntityReadHelpers;
 
-namespace PointOfSale.Presentation.Actions.OfferCategoryActions
+namespace PointOfSale.Presentation.Actions.CategoryActions
 {
-    public class OfferCategoryAddAction : IAction
+    public class OfferCategoryDeleteAction : IAction
     {
         private readonly OfferCategoryRepository _offerCategoryRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly OfferCategoryHelpers _offerCategoryHelper;
         private readonly CategoryReadHelpers _categoryReadHelper;
-        public string Label { get; set; } = "Add offer in category";
+        private readonly OfferRepository _offerRepository;
 
-        public OfferCategoryAddAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository, 
+        public int MenuIndex { get; set; }
+        public string Label { get; set; } = "Delete offer from category";
+
+        public OfferCategoryDeleteAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository,
             OfferRepository offerRepository)
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;
+            _offerRepository = offerRepository;
             _offerCategoryHelper = new OfferCategoryHelpers(offerRepository);
             _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
@@ -32,27 +36,30 @@ namespace PointOfSale.Presentation.Actions.OfferCategoryActions
         {
             var doesContinue = true;
             PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            Console.WriteLine("Enter name of category you want to add offer into:");
+            Console.WriteLine("Enter name of category you want to delete from:");
             var categoryName = _categoryReadHelper.TryGetName(false, ref doesContinue);
             if (!doesContinue) return;
 
-            //maybe show list of offers that aren't in?
+            var categoryToPrint = _categoryRepository.FindFullByName(categoryName);
+            foreach (var offerId in 
+                categoryToPrint.OfferCategories.Select(oc => oc.OfferId))
+            {
+                PrintHelpers.PrintOffer(_offerRepository.Find(offerId));
+            }
 
+            Console.WriteLine($"Enter name of offer you want to delete from {categoryToPrint.Name}:");
+
+            var category = _categoryRepository.FindFullByName(categoryName);
             while (true)
             {
-                var category = _categoryRepository.FindFullByName(categoryName);
-                Console.WriteLine($"Enter name of offer you want to add into {category.Name}:");
                 var offerId = _offerCategoryHelper.TryGetOfferId
-                    (false, category.OfferCategories, ref doesContinue);
+                    (true, category.OfferCategories, ref doesContinue);
                 if (!doesContinue) return;
 
-                _offerCategoryRepository.Add(
-                    new OfferCategory()
-                    {
-                        CategoryId = category.Id,
-                        OfferId = offerId
-                    }
-                    );
+                _offerCategoryRepository.Delete(offerId, category.Id);
+
+                var del = category.OfferCategories.First(oc => oc.OfferId == offerId && oc.CategoryId == category.Id); //weird but works, fix later
+                category.OfferCategories.Remove(del);
             }
         }
     }

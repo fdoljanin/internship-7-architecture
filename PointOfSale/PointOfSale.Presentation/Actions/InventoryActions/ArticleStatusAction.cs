@@ -18,6 +18,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
         {
             _offerRepository = offerRepository;
         }
+        public int MenuIndex { get; set; }
         public string Label { get; set; } = "Article inventory status";
         public void Call()
         {
