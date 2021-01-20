@@ -51,6 +51,7 @@ namespace PointOfSale.Presentation.Helpers
             while (true)
             {
                 doesContinue = DoesContinue(out var input);
+                if (!doesContinue) return default;
                 var doesParse = Enum.TryParse(typeof(TEnum), input.Capitalize(), out var result);
                 if (doesContinue && (!doesParse || int.TryParse(input, out _)))
                 {
@@ -156,6 +157,12 @@ namespace PointOfSale.Presentation.Helpers
                 if (!doesContinue) return (default, default);
 
                 var doesParse = int.TryParse(input.Substring(1), out var number);
+
+                if (!doesParse)
+                {
+                    Console.WriteLine("Enter a number!");
+                    continue;
+                }
                 if (input[0] == '>') return (number, int.MaxValue);
                 if (input[0] == '<') return (int.MinValue, number);
 

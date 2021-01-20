@@ -27,6 +27,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             {
                 Console.WriteLine($"{categoryCount.Name}\t\t{categoryCount.Count}");
             }
+
+            Console.ReadLine();
         }
     }
 }

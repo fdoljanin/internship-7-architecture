@@ -19,7 +19,7 @@ namespace PointOfSale.Presentation.Factories
             {
                 new ReportByCategoryAction(RepositoryFactory.GetRepository<BillRepository>()),
                 new ReportByOfferTypeAction(RepositoryFactory.GetRepository<BillRepository>()),
-                new ReportByCategoryAction(RepositoryFactory.GetRepository<BillRepository>()),
+                new ReportArticleByCategoryAction(RepositoryFactory.GetRepository<ArticleBillRepository>()),
                 new ReportActiveSubscriptions(RepositoryFactory.GetRepository<SubscriptionBillRepository>()),
                 new ReportInventoryQuantity(RepositoryFactory.GetRepository<OfferRepository>()),
                 new ReportTopSelling(RepositoryFactory.GetRepository<OfferRepository>()),

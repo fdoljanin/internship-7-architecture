@@ -25,6 +25,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             Console.WriteLine("Active subscriptions");
             var activeSubscriptions = _subscriptionBillRepository.GetActiveSubscriptions();
             PrintHelpers.PrintSubscriptions(activeSubscriptions);
+
+            Console.ReadLine();
         }
     }
 }

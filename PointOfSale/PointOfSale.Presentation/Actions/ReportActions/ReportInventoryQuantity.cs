@@ -29,6 +29,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
 
             var articles = _offerRepository.GetArticlesLessOrMore(range);
             PrintHelpers.PrintOfferList(articles);
+
+            Console.ReadLine();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -16,7 +17,8 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Offer> GetAllAvailable()
         {
-            return DbContext.Offers.Where(o => o.Type == OfferType.Rent && o.Quantity > 0 && o.IsActive).ToList();
+            return DbContext.Offers
+                .Where(o => o.Type == OfferType.Rent && o.Quantity > 0 && o.IsActive).ToList();
         }
 
         public  Offer FindByName(string name)
@@ -32,7 +34,9 @@ namespace PointOfSale.Domain.Repositories
         public void AddSubscription(SubscriptionBill subscriptionBill)
         {
             DbContext.SubscriptionBills.Add(subscriptionBill);
+            SaveChanges();
             --subscriptionBill.Offer.Quantity;
+            DbContext.Entry(subscriptionBill.Offer).State = EntityState.Modified;
             SaveChanges();
         }
 

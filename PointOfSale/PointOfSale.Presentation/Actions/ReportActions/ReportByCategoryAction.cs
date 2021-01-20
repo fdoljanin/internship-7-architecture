@@ -34,6 +34,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
 
             var report = _billRepository.GetCategoryReport(billType, dateRange);
             PrintHelpers.PrintBills(report);
+
+            Console.ReadLine();
         }
     }
 }

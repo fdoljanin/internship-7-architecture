@@ -35,6 +35,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
             var price = _billRepository.GetSubscriptionBill(pin);
             Console.WriteLine($"Price: {price}");
+            Console.ReadLine();
         }
     }
 }

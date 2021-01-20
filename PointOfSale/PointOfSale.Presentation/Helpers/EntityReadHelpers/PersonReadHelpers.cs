@@ -24,6 +24,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             while (true)
             {
                 doesContinue = ReadHelpers.DoesContinue(out var pin);
+                if (!doesContinue) return default; 
                 if (!ReadHelpers.IsPinValid(pin))
                 {
                     Console.WriteLine("Pin not valid!");

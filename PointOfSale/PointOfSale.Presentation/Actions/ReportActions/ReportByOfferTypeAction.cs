@@ -23,7 +23,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             var doesContinue = true;
 
-            Console.WriteLine("Enter bill type (Traditional, Subscription, Service):");
+            Console.WriteLine("Enter bill type (Item, Service, Rent):");
             var offerType = ReadHelpers.TryEnumParse<OfferType>(ref doesContinue);
             if (!doesContinue) return;
 
@@ -32,6 +32,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
 
             var report = _billRepository.GetOfferTypeReport(offerType, dateRange);
             PrintHelpers.PrintBills(report);
+
+            Console.ReadLine();
         }
     }
 }

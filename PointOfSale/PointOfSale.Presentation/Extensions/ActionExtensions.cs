@@ -32,8 +32,10 @@ namespace PointOfSale.Presentation.Extensions
                     }
                     else
                     {
+                        Console.Clear();
                         exitActionSelected = action is ExitMenuAction;
                         action.Call();
+                        Console.Clear();
                     }
                 }
                 else

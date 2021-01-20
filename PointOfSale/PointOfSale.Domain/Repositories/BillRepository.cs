@@ -66,7 +66,7 @@ namespace PointOfSale.Domain.Repositories
             foreach (var subscription in customer.SubscriptionBills)
             {
                 subscription.BillId = bill.Id;
-                subscription.Offer.Quantity++;
+                ++subscription.Offer.Quantity;
 
                 bill.Cost += subscription.Offer.Price *
                             ((bill.TransactionDate.Year - subscription.StartTime.Year) * 12 +
@@ -116,6 +116,9 @@ namespace PointOfSale.Domain.Repositories
             }
 
             return DbContext.Bills
+                .Include(b => b.ArticleBills)
+                .Include(b => b.ServiceBills)
+                .Include(b => b.SubscriptionBills)
                 .Where(dateFilter)
                 .Where(typeFilter)
                 .Where(b => !b.Cancelled)

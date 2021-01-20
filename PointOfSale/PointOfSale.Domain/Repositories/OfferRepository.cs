@@ -59,7 +59,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Offer> GetAll()
         {
-            return DbContext.Offers.Where(o=>o.IsActive).ToList();
+            return DbContext.Offers.Where(o=>o.IsActive).AsNoTracking().ToList();
         }
 
         public void ChangeQuantity(int offerId, int newQuantity)

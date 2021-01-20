@@ -24,14 +24,13 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             var doesContinue = true;
 
-            while (true)
-            {
-                Console.WriteLine("Enter year (yyyy) to see profit:");
-                var year = ReadHelpers.TryIntParse(ref doesContinue);
-                if (!doesContinue) return;
-                var profit = _billRepository.GetYearProfit(year);
-                Console.WriteLine($"Profit of year {year}: {profit}");
-            }
+            Console.WriteLine("Enter year (yyyy) to see profit:");
+            var year = ReadHelpers.TryIntParse(ref doesContinue);
+            if (!doesContinue) return;
+            var profit = _billRepository.GetYearProfit(year);
+            Console.WriteLine($"Profit of year {year}: {profit}");
+
+            Console.ReadLine();
         }
     }
 }

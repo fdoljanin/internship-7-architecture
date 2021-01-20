@@ -29,6 +29,8 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             }
 
             PrintHelpers.PrintOfferList(topSelling.Select(ts => ts.Offer).ToList());
+
+            Console.ReadLine();
         }
     }
 }
