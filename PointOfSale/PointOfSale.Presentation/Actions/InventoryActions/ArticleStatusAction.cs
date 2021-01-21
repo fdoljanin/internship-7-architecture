@@ -26,6 +26,8 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
                 .Where(o => o.Type == OfferType.Item).ToList();
 
             PrintHelpers.PrintOfferList(articles);
+
+            Console.ReadLine();
         }
     }
 }

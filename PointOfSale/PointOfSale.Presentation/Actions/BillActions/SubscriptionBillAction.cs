@@ -27,6 +27,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
         {
             var doesContinue = true;
             var customerList = _customerRepository.GetAll();
+            PrintHelpers.PrintPersonList(customerList);
             Console.WriteLine("Enter customer index:");
             var customerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, customerList.Count) - 1;
             if (!doesContinue) return;

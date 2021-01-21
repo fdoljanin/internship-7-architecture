@@ -21,16 +21,6 @@ namespace PointOfSale.Domain.Repositories
                 .Where(o => o.Type == OfferType.Rent && o.Quantity > 0 && o.IsActive).ToList();
         }
 
-        public  Offer FindByName(string name)
-        {
-            return DbContext.Offers.First(o => o.Type == OfferType.Rent && o.IsActive);
-        }
-
-        public bool CheckUnique(string name)
-        {
-            return !DbContext.Offers.Any(o => o.Type == OfferType.Rent && o.Name.ToLower() == name.ToLower() && o.IsActive);
-        }
-
         public void AddSubscription(SubscriptionBill subscriptionBill)
         {
             DbContext.SubscriptionBills.Add(subscriptionBill);

@@ -14,10 +14,6 @@ namespace PointOfSale.Domain.Repositories
         {
         }
 
-        public bool CheckUnique(string name)
-        {
-            return !DbContext.Categories.Any(c => c.Name.ToLower() == name.ToLower());
-        }
 
         public bool IsStringUnique(string name)
         {
@@ -49,14 +45,5 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Categories.ToList();
         }
 
-        public Category Find(int offerId)
-        {
-            return DbContext.Categories.Find(offerId);
-        }
-
-        public Category FindFullByName(string name)
-        {
-            return DbContext.Categories.Include(c=>c.OfferCategories).First(c => c.Name.ToLower() == name.ToLower());
-        }
     }
 }

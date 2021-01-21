@@ -24,9 +24,9 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
         public void Call()
         {
             var availableSubscriptions = _subscriptionRepository.GetAllAvailable();
-
-
             PrintHelpers.PrintOfferList(availableSubscriptions);
+
+            Console.ReadLine();
         }
     }
 }

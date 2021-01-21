@@ -14,11 +14,6 @@ namespace PointOfSale.Domain.Repositories
         {
         }
 
-        public bool DoesPinExist(string pin)
-        {
-            return DbContext.Employees.Any(c => c.Pin == pin);
-        }
-
         public bool IsStringUnique(string pin)
         {
             return !DbContext.Employees.Any(e => e.Pin == pin);
@@ -48,10 +43,6 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Employees.ToList();
         }
 
-        public Employee GetByPin(string pin)
-        {
-            return DbContext.Employees.First(e => e.Pin == pin);
-        }
 
         public ICollection<Employee> GetAllAvailable(DateTime start, int duration)
         {

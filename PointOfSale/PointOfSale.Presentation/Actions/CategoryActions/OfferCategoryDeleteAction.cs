@@ -15,9 +15,6 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     {
         private readonly OfferCategoryRepository _offerCategoryRepository;
         private readonly CategoryRepository _categoryRepository;
-        private readonly OfferCategoryHelpers _offerCategoryHelper;
-        private readonly CategoryReadHelpers _categoryReadHelper;
-        private readonly OfferRepository _offerRepository;
 
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Delete offer from category";
@@ -27,9 +24,6 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;
-            _offerRepository = offerRepository;
-            _offerCategoryHelper = new OfferCategoryHelpers(offerRepository);
-            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
@@ -56,7 +50,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
                 if (offer == null)
                 {
-                    Console.WriteLine("Offer is already there!");
+                    Console.WriteLine("Offer is already deleted!");
                     continue;
                 }
 

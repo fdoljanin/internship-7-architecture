@@ -14,12 +14,10 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
     public class InventoryModifyAction:IAction
     {
         private readonly OfferRepository _offerRepository;
-        private readonly OfferReadHelpers _offerReadHelper;
 
         public InventoryModifyAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
-            _offerReadHelper = new OfferReadHelpers(offerRepository);
         }
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Modify inventory";
@@ -33,6 +31,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
 
             while (true)
             {
+                Console.WriteLine("Enter offer index");
                 var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offers.Count) - 1;
                 if (!doesContinue) return;
                 var offer = offers.ElementAt(offerIndex);

@@ -38,9 +38,5 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Customers.ToList();
         }
 
-        public Customer GetByPin(string pin)
-        {
-            return DbContext.Customers.First(c => c.Pin == pin);
-        }
     }
 }

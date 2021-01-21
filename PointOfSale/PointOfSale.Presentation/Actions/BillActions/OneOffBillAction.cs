@@ -43,7 +43,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var doesContinue = true;
             decimal totalCost = 0; //move to domain later
 
-            PrintHelpers.PrintOfferList(_articleBillRepository.GetAllAvailable());
+            //PrintHelpers.PrintOfferList(_articleBillRepository.GetAllAvailable());
             Console.WriteLine("Add articles:");
             while (true)
             {
@@ -78,6 +78,8 @@ namespace PointOfSale.Presentation.Actions.BillActions
             }
 
             _billRepository.FinishBill(bill.Id, totalCost, DateTime.Now);
+
+            Console.ReadLine();
         }
     }
 }

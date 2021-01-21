@@ -40,10 +40,13 @@ namespace PointOfSale.Domain.Repositories
 
             if (!isDuplicate) return false;
 
-            var originalArticle = DbContext.ArticleBills.
+            var articleBillDb = DbContext.ArticleBills.
                 First(ab => ab.BillId == billId && ab.OfferId == articleBill.OfferId);
-            originalArticle.Quantity += articleBill.Quantity;
-            
+            articleBillDb.Quantity += articleBill.Quantity;
+
+            var articleDb = DbContext.Offers.Find(articleBill.OfferId);
+            articleDb.Quantity -= articleBill.Quantity;
+
             SaveChanges();
             return true;
         }

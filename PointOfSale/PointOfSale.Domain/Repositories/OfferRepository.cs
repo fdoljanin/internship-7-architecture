@@ -22,10 +22,6 @@ namespace PointOfSale.Domain.Repositories
             return !DbContext.Offers.Any(o => o.Name.ToLower() == name.ToLower() && o.IsActive);
         }
 
-        public Offer FindByName(string name)
-        {
-            return DbContext.Offers.Where(o => o.Name == name && o.IsActive).ToList()[0];
-        }
 
 
         public void Add(Offer offer)
@@ -49,10 +45,6 @@ namespace PointOfSale.Domain.Repositories
             SaveChanges();
         }
 
-        public Offer Find(int offerId)
-        {
-            return DbContext.Offers.Find(offerId);
-        }
 
         public ICollection<Offer> GetAll()
         {
@@ -115,7 +107,7 @@ namespace PointOfSale.Domain.Repositories
                     })
                     .ToList());
 
-//            offers = offers.Where(o => o.Offer.IsActive).ToList();
+            offers = offers.Where(o => o.Offer.IsActive).ToList();
 
             offers.Sort((x,y) => y.Quantity.CompareTo(x.Quantity));
 

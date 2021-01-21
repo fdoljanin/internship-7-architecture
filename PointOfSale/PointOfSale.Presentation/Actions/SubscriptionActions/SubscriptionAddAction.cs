@@ -16,8 +16,7 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
         private readonly CustomerRepository _customerRepository;
         private readonly SubscriptionBillRepository _subscriptionBillRepository;
 
-        private readonly SubscriptionReadHelpers _subscriptionReadHelper;
-        private readonly PersonReadHelpers _customerReadHelper;
+
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add Subscription";
 
@@ -26,7 +25,6 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
         {
             _customerRepository = customerRepository;
             _subscriptionBillRepository = subscriptionBillRepository;
-            _subscriptionReadHelper = new SubscriptionReadHelpers(subscriptionBillRepository);
         }
 
         public void Call()

@@ -15,8 +15,6 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     {
         private readonly OfferCategoryRepository _offerCategoryRepository;
         private readonly CategoryRepository _categoryRepository;
-        private readonly OfferCategoryHelpers _offerCategoryHelper;
-        private readonly CategoryReadHelpers _categoryReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add offer in category";
 
@@ -25,8 +23,6 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;
-            _offerCategoryHelper = new OfferCategoryHelpers(offerRepository);
-            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
