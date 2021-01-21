@@ -48,13 +48,13 @@ namespace PointOfSale.Domain.Repositories
             return true;
         }
 
-        public decimal GetSubscriptionBill(string customerPin)
+        public decimal GetSubscriptionBill(int customerId)
         {
             var customer = DbContext.Customers
                 .Include(c => c.SubscriptionBills
                     .Where(sb => sb.BillId == null))
                 .ThenInclude(sb => sb.Offer)
-                .First(c => c.Pin == customerPin);
+                .First(c => c.Id == customerId);
             var bill = new Bill();
             DbContext.Bills.Add(bill);
 

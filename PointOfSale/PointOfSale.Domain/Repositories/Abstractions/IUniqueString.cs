@@ -4,8 +4,8 @@ using System.Text;
 
 namespace PointOfSale.Domain.Repositories.Abstractions
 {
-    public interface IPersonRepository
+    public interface IUniqueString
     {
-        public bool DoesPinExist(string pin);
+        public bool IsStringUnique(string inputString);
     }
 }

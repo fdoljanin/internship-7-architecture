@@ -8,7 +8,7 @@ using PointOfSale.Domain.Repositories.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
-    public class EmployeeRepository : BaseRepository, IPersonRepository
+    public class EmployeeRepository : BaseRepository, IUniqueString
     {
         public EmployeeRepository(PointOfSaleDbContext dbContext) : base(dbContext)
         {
@@ -17,6 +17,11 @@ namespace PointOfSale.Domain.Repositories
         public bool DoesPinExist(string pin)
         {
             return DbContext.Employees.Any(c => c.Pin == pin);
+        }
+
+        public bool IsStringUnique(string pin)
+        {
+            return !DbContext.Employees.Any(e => e.Pin == pin);
         }
 
         public void Add(Employee employee)

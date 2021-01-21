@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using PointOfSale.Data.Entities.Models;
@@ -11,13 +10,13 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
     public class ArticleBillHelpers
     {
-        private readonly ArticleBillRepository _articleBillRepository;
+        private ArticleBillRepository _articleBillRepository;
+
         public ArticleBillHelpers(ArticleBillRepository articleBillRepository)
         {
             _articleBillRepository = articleBillRepository;
         }
-
-        private (string name, int quantity) TryGetNameAndQuantity(ref bool doesContinue)
+        private (int index, int quantity) TryGetIndexAndQuantity(ref bool doesContinue, int maxIndex)
         {
             while (true)
             {
@@ -31,44 +30,36 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 
                 var quantityInput = input.Substring(input.LastIndexOf('x') + 1);
                 var doesParse = int.TryParse(quantityInput, out var quantity);
-                if (!doesParse || quantity <= 0)
-                {
-                    Console.WriteLine("Please enter valid quantity!");
-                    continue;
-                }
 
-                var name = input.Substring(0, input.LastIndexOf('x')).Trim();
-                return (name, quantity);
+                var indexInput = input.Substring(0, input.LastIndexOf('x'));
+                doesParse &= int.TryParse(indexInput, out var index);
+
+                if (doesParse && quantity > 0 && index > 0 && index <= maxIndex) return (index-1, quantity);
+                Console.WriteLine("Please enter valid numbers!");
             }
         }
-    
+
 
         public ArticleBill TryGetArticleBill(ref bool doesContinue)
         {
             while (true)
             {
-                var (name, quantity) = TryGetNameAndQuantity(ref doesContinue);
+                var articleList = _articleBillRepository.GetAllAvailable();
+                PrintHelpers.PrintOfferList(articleList);
+
+                var (articleIndex, quantity) = TryGetIndexAndQuantity(ref doesContinue, articleList.Count);
                 if (!doesContinue) return default;
 
-                if (!_articleBillRepository.CheckDoesExist(name))
-                {
-                    Console.WriteLine($"Article {name} does not exist!");
-                    continue;
-                }
+                var article = articleList.ElementAt(articleIndex);
 
-                if (!_articleBillRepository.CheckIsAvailable(name, quantity))
-                {
-                    Console.WriteLine("Article not available in that quantity!");
-                    continue;
-                }
-
-                return new ArticleBill()
-                {
-                    OfferId = _articleBillRepository.FindByName(name).Id,
-                    Quantity = quantity
-                };
+                if (quantity <= article.Quantity)
+                    return new ArticleBill()
+                    {
+                        OfferId = article.Id,
+                        Quantity = quantity
+                    };
+                Console.WriteLine("Article not available in that quantity!");
             }
         }
-
     }
 }

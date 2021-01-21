@@ -4,10 +4,11 @@ using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
+using PointOfSale.Domain.Repositories.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
-    public class CategoryRepository : BaseRepository
+    public class CategoryRepository : BaseRepository, IUniqueString
     {
         public CategoryRepository(PointOfSaleDbContext dbContext) : base(dbContext)
         {
@@ -18,22 +19,27 @@ namespace PointOfSale.Domain.Repositories
             return !DbContext.Categories.Any(c => c.Name.ToLower() == name.ToLower());
         }
 
+        public bool IsStringUnique(string name)
+        {
+            return !DbContext.Categories.Any(c => c.Name.ToLower() == name.ToLower());
+        }
+
         public void Add(Category category)
         {
             DbContext.Categories.Add(category);
             SaveChanges();
         }
 
-        public void Edit(string name, Category editedCategory)
+        public void Edit(int categoryId, Category editedCategory)
         {
-            var categoryDb = DbContext.Categories.First(c => c.Name.ToLower() == name.ToLower());
+            var categoryDb = DbContext.Categories.Find(categoryId);
             categoryDb.Name = editedCategory.Name;
             SaveChanges();
         }
 
-        public void Delete(string name)
+        public void Delete(int categoryId)
         {
-            var categoryDb = DbContext.Categories.First(c => c.Name.ToLower() == name.ToLower());
+            var categoryDb = DbContext.Categories.Find(categoryId);
             DbContext.Categories.Remove(categoryDb);
             SaveChanges();
         }
@@ -43,9 +49,9 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Categories.ToList();
         }
 
-        public Category FindByName(string name)
+        public Category Find(int offerId)
         {
-            return DbContext.Categories.First(c => c.Name.ToLower() == name.ToLower());
+            return DbContext.Categories.Find(offerId);
         }
 
         public Category FindFullByName(string name)

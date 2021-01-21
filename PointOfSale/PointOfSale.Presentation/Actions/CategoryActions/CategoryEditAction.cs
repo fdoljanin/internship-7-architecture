@@ -15,30 +15,31 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     public class CategoryEditAction : IAction
     {
         private readonly CategoryRepository _categoryRepository;
-        private readonly CategoryReadHelpers _categoryReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Category";
 
         public CategoryEditAction(CategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
             var isNotBlank = true;
-            PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            Console.WriteLine("Enter name of category to edit:");
-            var name = _categoryReadHelper.TryGetName(false, ref isNotBlank);
+            var categoryList = _categoryRepository.GetAll();
+            PrintHelpers.PrintCategories(categoryList);
+            Console.WriteLine("Enter index of category to edit:");
+            var categoryIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, categoryList.Count) -1 ;
             if (!isNotBlank) return;
-            var categoryToEdit = _categoryRepository.FindByName(name);
+            var categoryToEdit = categoryList.ElementAt(categoryIndex);
             
             Console.WriteLine($"Enter new category name, enter for default ({categoryToEdit.Name}):");
-            var newName = _categoryReadHelper.TryGetName(true, ref isNotBlank);
+            var newName = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
             if (!isNotBlank) return;
 
-            _categoryRepository.Edit(categoryToEdit.Name,
+            _categoryRepository.Edit(categoryToEdit.Id,
                 new Category()
                 {
                     Name = newName

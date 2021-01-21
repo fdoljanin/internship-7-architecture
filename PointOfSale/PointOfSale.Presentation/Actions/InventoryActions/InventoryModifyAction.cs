@@ -33,18 +33,11 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
 
             while (true)
             {
-                var offerName = _offerReadHelper.TryGetName(false, ref doesContinue);
+                var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offers.Count) - 1;
                 if (!doesContinue) return;
+                var offer = offers.ElementAt(offerIndex);
 
-                Console.WriteLine("Enter offer name:");
-                var offer = _offerRepository.FindByName(offerName);
-                if (offer.Type == OfferType.Service)
-                {
-                    Console.WriteLine("Services have no quantity!");
-                    continue;
-                }
-
-                Console.WriteLine($"Enter new quantity (old: {offer.Quantity}");
+                Console.WriteLine($"Enter new quantity for {offer.Name} (old: {offer.Quantity})");
                 var newQuantity = ReadHelpers.TryIntParse(ref doesContinue, 0);
                 if (!doesContinue) break;
 

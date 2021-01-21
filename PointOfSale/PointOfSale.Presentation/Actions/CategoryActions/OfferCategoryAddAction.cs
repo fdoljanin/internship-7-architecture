@@ -31,29 +31,41 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
         public void Call()
         {
-            var doesContinue = true;
-            PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            Console.WriteLine("Enter name of category you want to add offer into:");
-            var categoryName = _categoryReadHelper.TryGetName(false, ref doesContinue);
+            var doesContinue= true;
+            var categoryList = _categoryRepository.GetAll();
+            PrintHelpers.PrintCategories(categoryList);
+            Console.WriteLine("Enter index of category to insert elements into:");
+            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
             if (!doesContinue) return;
+            var category = categoryList.ElementAt(categoryIndex);
 
-            //maybe show list of offers that aren't in?
-
+            var offersOutside = _offerCategoryRepository.GetOfferList(category.Id, false).ToList();
+            
+            PrintHelpers.PrintOfferList(offersOutside);
             while (true)
             {
-                var category = _categoryRepository.FindFullByName(categoryName);
-                Console.WriteLine($"Enter name of offer you want to add into {category.Name}:");
-                var offerId = _offerCategoryHelper.TryGetOfferId
-                    (false, category.OfferCategories, ref doesContinue);
+                Console.WriteLine($"Enter index of offer you want to add into {category.Name}:");
+
+                var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offersOutside.Count) - 1;
                 if (!doesContinue) return;
+
+                var offer = offersOutside.ElementAt(offerIndex);
+
+                if (offer == null)
+                {
+                    Console.WriteLine("Offer is already there!");
+                    continue;
+                }
 
                 _offerCategoryRepository.Add(
                     new OfferCategory()
                     {
                         CategoryId = category.Id,
-                        OfferId = offerId
+                        OfferId = offer.Id
                     }
                     );
+
+                offersOutside[offerIndex] = null;
             }
         }
     }

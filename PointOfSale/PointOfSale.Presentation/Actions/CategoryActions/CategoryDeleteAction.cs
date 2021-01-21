@@ -13,25 +13,27 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     public class CategoryDeleteAction : IAction
     {
         private readonly CategoryRepository _categoryRepository;
-        private readonly CategoryReadHelpers _categoryReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Delete Category";
 
         public CategoryDeleteAction(CategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _categoryReadHelper = new CategoryReadHelpers(categoryRepository);
         }
 
         public void Call()
         {
             var doesContinue = true;
-            PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            Console.WriteLine("Enter name of category you want to delete:");
-            var name = _categoryReadHelper.TryGetName(false, ref doesContinue);
+            var categoryList = _categoryRepository.GetAll();
+            PrintHelpers.PrintCategories(categoryList);
+
+            Console.WriteLine("Enter index of category to delete:");
+            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
             if (!doesContinue) return;
-            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {name}?")) return;
-            _categoryRepository.Delete(name);
+
+            var categoryToDelete = categoryList.ElementAt(categoryIndex);
+            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}?")) return;
+            _categoryRepository.Delete(categoryToDelete.Id);
         }
     }
 }

@@ -14,14 +14,12 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferDeleteAction:IAction
     {
         private readonly OfferRepository _offerRepository;
-        private readonly OfferReadHelpers _offerReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Delete offer";
 
         public OfferDeleteAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
-            _offerReadHelper = new OfferReadHelpers(offerRepository);
         }
 
         public void Call()
@@ -31,13 +29,13 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             PrintHelpers.PrintOfferList(offerList);
             Console.WriteLine();
 
-            Console.WriteLine("Enter name of the offer to delete:");
-            var name = _offerReadHelper.TryGetName(false, ref doesContinue);
+            Console.WriteLine("Enter offer index to delete:");
+            var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offerList.Count) - 1;
             if (!doesContinue) return;
+            var offerToDelete = offerList.ElementAt(offerIndex);
 
-            if (ReadHelpers.Confirm($"Are you sure you want to delete {name.Capitalize()}? (yes/no)"))
-                _offerRepository.Delete(name);
-
+            if (ReadHelpers.Confirm($"Are you sure you want to delete {offerToDelete.Name}? (yes/no)"))
+                _offerRepository.Delete(offerToDelete.Id);
         }
     }
 }

@@ -20,8 +20,11 @@ namespace PointOfSale.Presentation.Helpers
         public static void PrintOfferList(ICollection<Offer> offers)
         {
             Console.WriteLine("TYPE\t\tNAME\t\tPRICE\t\tQUANTITY");
-            foreach (var offer in offers)
-                PrintOffer(offer);
+            for (var i = 0; i < offers.Count; ++i)
+            {
+                Console.Write($"{i+1}. ");
+                PrintOffer(offers.ElementAt(i));
+            }
         }
 
         public static void PrintPerson(Person person)
@@ -35,17 +38,19 @@ namespace PointOfSale.Presentation.Helpers
             Console.Write("PIN\t\tNAME \t\t\t");
             if (persons.First() is Employee) Console.Write("WORK START\t\tWORK END");
             Console.WriteLine();
-            foreach (var person in persons)
+            for (var i = 0; i < persons.Count; ++i)
             {
-                PrintPerson(person);
+                Console.Write($"{i+1}. ");
+                PrintPerson(persons.ElementAt(i));
             }
         }
 
         public static void PrintCategories(ICollection<Category> categories)
         {
-            foreach (var category in categories)
+            Console.WriteLine("CATEGORY NAME");
+            for (var i = 0; i < categories.Count; ++i)
             {
-                Console.WriteLine(category.Name);
+                Console.WriteLine($"{i+1}. {categories.ElementAt(i).Name}");
             }
         }
 

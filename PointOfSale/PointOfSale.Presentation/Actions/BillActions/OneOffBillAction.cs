@@ -63,7 +63,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 Console.WriteLine("Article added!");
             }
 
-            PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
+            //PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
             Console.WriteLine("Add services:");
             while (true)
             {

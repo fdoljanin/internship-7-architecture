@@ -22,16 +22,6 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             _employeeRepository = employeeRepository;
         }
 
-        private string TryGetServiceName(ref bool doesContinue)
-        {
-            while (true)
-            {
-                doesContinue = ReadHelpers.DoesContinue(out var serviceName);
-                if (!doesContinue) return null;
-                if (_serviceBillRepository.DoesExist(serviceName)) return serviceName;
-                Console.WriteLine("Service does not exist!");
-            }
-        }
 
         private (DateTime serviceStart, ICollection<Employee> availableEmployees) 
             TryGetTime(int lengthInHours, ref bool doesContinue)
@@ -57,21 +47,17 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             }
         }
 
-        private string GetEmployeePin(ICollection<Employee> employees)
-        {
-            while (true)
-            {
-                var pin = Console.ReadLine().Trim();
-                if (employees.Any(e => e.Pin == pin)) return pin;
-                Console.WriteLine("PIN not valid!");
-            }
-        }
 
         public ServiceBill TryGetService(ref bool doesContinue)
         {
-            Console.WriteLine("Enter service name:");
-            var serviceName = TryGetServiceName(ref doesContinue);
+            var serviceList = _serviceBillRepository.GetAll();
+            PrintHelpers.PrintOfferList(serviceList);
+
+            Console.WriteLine("Enter service index:");
+            var serviceIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, serviceList.Count) - 1;
             if (!doesContinue) return null;
+
+            var service = serviceList.ElementAt(serviceIndex);
 
             Console.WriteLine("Enter service duration in hours:");
             var durationInHours = ReadHelpers.TryIntParse(ref doesContinue, 1, 23);
@@ -83,13 +69,16 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 
             PrintHelpers.PrintPersonList(availableEmployees);
 
-            Console.WriteLine("Enter employee PIN:");
-            var employeePin = GetEmployeePin(availableEmployees);
+            Console.WriteLine("Enter employee index:");
+            var employeeIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, availableEmployees.Count) - 1;
+
+            if (!doesContinue) return null;
+            var employee = availableEmployees.ElementAt(employeeIndex);
 
             var serviceBill = new ServiceBill()
             {
-                OfferId = _serviceBillRepository.FindByName(serviceName).Id,
-                EmployeeId = _employeeRepository.GetByPin(employeePin).Id,
+                OfferId = service.Id,
+                EmployeeId = employee.Id,
                 StartTime = startTime,
                 Duration = durationInHours
             };

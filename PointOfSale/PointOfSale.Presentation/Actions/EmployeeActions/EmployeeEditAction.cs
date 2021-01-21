@@ -14,29 +14,30 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
     public class EmployeeEditAction : IAction
     {
         private readonly EmployeeRepository _employeeRepository;
-        private readonly PersonReadHelpers _personReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Employee";
 
         public EmployeeEditAction(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _personReadHelper = new PersonReadHelpers(employeeRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(employeeRepository);
         }
         public void Call()
         {
             var employeeEdited = new Employee();
-            PrintHelpers.PrintPersonList(_employeeRepository.GetAll());
+            var employeeList = _employeeRepository.GetAll();
 
+            PrintHelpers.PrintPersonList(employeeList);
             var isNotBlank = true;
-            Console.WriteLine("Enter pin of employee you want to edit:");
-            var pin = _personReadHelper.TryGetPin(true, ref isNotBlank);
+            Console.WriteLine("Enter index of employee you want to edit:");
+            var employeeIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, employeeList.Count) - 1;
             if (!isNotBlank) return;
 
-            var employeeToEdit = _employeeRepository.GetByPin(pin);
+            var employeeToEdit = employeeList.ElementAt(employeeIndex);
 
             Console.WriteLine($"New pin, enter for default ({employeeToEdit.Pin}):");
-            var newPin = _personReadHelper.TryGetPin(false, ref isNotBlank);
+            var newPin = _uniqueReadHelper.TryGetUniquePin(ref isNotBlank);
             employeeEdited.Pin = isNotBlank ? newPin : employeeToEdit.Pin;
 
             Console.WriteLine($"First name of the employee, enter for default ({employeeToEdit.FirstName}):");
@@ -51,6 +52,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
             var newWorkTime = ReadHelpers.TryGetWorkingHours(0, 24, ref isNotBlank);
             employeeEdited.WorkStart = isNotBlank ? newWorkTime.start : employeeToEdit.WorkStart;
             employeeEdited.WorkEnd = isNotBlank ? newWorkTime.end : employeeToEdit.WorkEnd;
+
             _employeeRepository.Edit(employeeToEdit.Id, employeeEdited);
         }
     }

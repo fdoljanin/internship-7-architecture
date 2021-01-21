@@ -7,15 +7,15 @@ using PointOfSale.Domain.Repositories.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
-    public class CustomerRepository : BaseRepository, IPersonRepository
+    public class CustomerRepository : BaseRepository, IUniqueString
     {
         public CustomerRepository(PointOfSaleDbContext dbContext) : base(dbContext)
         {
         }
 
-        public bool DoesPinExist(string pin)
+        public bool IsStringUnique(string pin)
         {
-            return DbContext.Customers.Any(c => c.Pin == pin);
+            return !DbContext.Customers.Any(c => c.Pin == pin);
         }
 
         public void Add(Customer customer)

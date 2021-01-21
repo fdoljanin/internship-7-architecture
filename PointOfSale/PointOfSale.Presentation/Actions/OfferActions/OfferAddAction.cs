@@ -17,14 +17,14 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferAddAction : IAction
     {
         private readonly OfferRepository _offerRepository;
-        private readonly OfferReadHelpers _offerReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add offer";
 
         public OfferAddAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
-            _offerReadHelper = new OfferReadHelpers(offerRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(offerRepository);
         }
         public void Call()
         {
@@ -35,7 +35,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             if (!doesContinue) return;
 
             Console.WriteLine("Enter name of product:");
-            var name = _offerReadHelper.TryGetName(true, ref doesContinue);
+            var name = _uniqueReadHelper.TryGetUniqueString(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter price, which is not negative:");

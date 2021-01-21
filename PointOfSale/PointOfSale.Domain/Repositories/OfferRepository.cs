@@ -7,16 +7,17 @@ using System.Security.Permissions;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
 using PointOfSale.Domain.Models;
+using PointOfSale.Domain.Repositories.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
-    public class OfferRepository : BaseRepository
+    public class OfferRepository : BaseRepository, IUniqueString
     {
         public OfferRepository(PointOfSaleDbContext dbContext) : base(dbContext)
         {
         }
 
-        public bool CheckUnique(string name)
+        public bool IsStringUnique(string name)
         {
             return !DbContext.Offers.Any(o => o.Name.ToLower() == name.ToLower() && o.IsActive);
         }
@@ -26,10 +27,6 @@ namespace PointOfSale.Domain.Repositories
             return DbContext.Offers.Where(o => o.Name == name && o.IsActive).ToList()[0];
         }
 
-        public Offer FindFullByName(string name)
-        {
-            return DbContext.Offers.Include(o=>o.OfferCategories).First(o => o.Name == name && o.IsActive);
-        }
 
         public void Add(Offer offer)
         {
@@ -45,9 +42,9 @@ namespace PointOfSale.Domain.Repositories
             SaveChanges();
         }
 
-        public void Delete(string name)
+        public void Delete(int offerId)
         {
-            var offerToDelete = DbContext.Offers.First(o => o.Name.ToLower() == name.ToLower() && o.IsActive);
+            var offerToDelete = DbContext.Offers.Find(offerId);
             offerToDelete.IsActive = false;
             SaveChanges();
         }
@@ -59,7 +56,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Offer> GetAll()
         {
-            return DbContext.Offers.Where(o=>o.IsActive).AsNoTracking().ToList();
+            return DbContext.Offers.Where(o=>o.IsActive).ToList(); //asnotracking
         }
 
         public void ChangeQuantity(int offerId, int newQuantity)

@@ -14,20 +14,20 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
     public class EmployeeAddAction : IAction
     {
         private readonly EmployeeRepository _employeeRepository;
-        private readonly PersonReadHelpers _personReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add Employee";
 
         public EmployeeAddAction(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _personReadHelper = new PersonReadHelpers(employeeRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(employeeRepository);
         }
         public void Call()
         {
             var doesContinue = true;
             Console.WriteLine("Enter employee pin:");
-            var pin = _personReadHelper.TryGetPin(false, ref doesContinue);
+            var pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter first name of the employee:");

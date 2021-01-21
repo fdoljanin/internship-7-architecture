@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,28 +15,30 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
     public class CustomerEditAction : IAction
     {
         private readonly CustomerRepository _customerRepository;
-        private readonly PersonReadHelpers _personReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Customer";
 
         public CustomerEditAction(CustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
-            _personReadHelper = new PersonReadHelpers(customerRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(customerRepository);
         }
         public void Call()
         {
             var customerEdited = new Customer();
-            PrintHelpers.PrintPersonList(_customerRepository.GetAll());
+            var customerList = _customerRepository.GetAll();
+
+            PrintHelpers.PrintPersonList(customerList);
             var isNotBlank = true;
-            Console.WriteLine("Enter pin of customer you want to edit:");
-            var pin = _personReadHelper.TryGetPin(true, ref isNotBlank);
+            Console.WriteLine("Enter index of customer you want to edit:");
+            var customerIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, customerList.Count) - 1;
             if (!isNotBlank) return;
 
-            var customerToEdit = _customerRepository.GetByPin(pin);
+            var customerToEdit = customerList.ElementAt(customerIndex);
 
             Console.WriteLine($"New pin, enter for default ({customerToEdit.Pin}):");
-            var newPin = _personReadHelper.TryGetPin(false, ref isNotBlank);
+            var newPin = _uniqueReadHelper.TryGetUniquePin(ref isNotBlank);
             customerEdited.Pin = isNotBlank ? newPin : customerToEdit.Pin;
 
             Console.WriteLine($"First name of the customer, enter for default ({customerToEdit.FirstName}):");

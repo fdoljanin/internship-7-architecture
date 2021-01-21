@@ -35,32 +35,36 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         public void Call()
         {
             var doesContinue = true;
-            PrintHelpers.PrintCategories(_categoryRepository.GetAll());
-            Console.WriteLine("Enter name of category you want to delete from:");
-            var categoryName = _categoryReadHelper.TryGetName(false, ref doesContinue);
+            var categoryList = _categoryRepository.GetAll();
+            PrintHelpers.PrintCategories(categoryList);
+            Console.WriteLine("Enter index of category to delete elements from:");
+            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
             if (!doesContinue) return;
+            var category = categoryList.ElementAt(categoryIndex);
 
-            var categoryToPrint = _categoryRepository.FindFullByName(categoryName);
-            foreach (var offerId in 
-                categoryToPrint.OfferCategories.Select(oc => oc.OfferId))
-            {
-                PrintHelpers.PrintOffer(_offerRepository.Find(offerId));
-            }
+            var offersInside = _offerCategoryRepository.GetOfferList(category.Id, true).ToList();
 
-            Console.WriteLine($"Enter name of offer you want to delete from {categoryToPrint.Name}:");
-
-            var category = _categoryRepository.FindFullByName(categoryName);
+            PrintHelpers.PrintOfferList(offersInside);
             while (true)
             {
-                var offerId = _offerCategoryHelper.TryGetOfferId
-                    (true, category.OfferCategories, ref doesContinue);
+                Console.WriteLine($"Enter index of offer you want to delete from {category.Name}:");
+
+                var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offersInside.Count) - 1;
                 if (!doesContinue) return;
 
-                _offerCategoryRepository.Delete(offerId, category.Id);
+                var offer = offersInside.ElementAt(offerIndex);
 
-                var del = category.OfferCategories.First(oc => oc.OfferId == offerId && oc.CategoryId == category.Id); //weird but works, fix later
-                category.OfferCategories.Remove(del);
+                if (offer == null)
+                {
+                    Console.WriteLine("Offer is already there!");
+                    continue;
+                }
+
+                _offerCategoryRepository.Delete(offer.Id, category.Id);
+
+                offersInside[offerIndex] = null;
             }
         }
+
     }
 }

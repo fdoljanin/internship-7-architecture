@@ -31,7 +31,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
         public void Call()
         {
             var doesContinue = true;
-            PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
+            //PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
 
             var service = _serviceBillHelper.TryGetService(ref doesContinue);
             if (!doesContinue) return;

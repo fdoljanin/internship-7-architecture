@@ -14,20 +14,20 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
     public class CustomerAddAction:IAction
     {
         private readonly CustomerRepository _customerRepository;
-        private readonly PersonReadHelpers _personReadHelper;
+        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add Customer";
 
         public CustomerAddAction(CustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
-            _personReadHelper = new PersonReadHelpers(customerRepository);
+            _uniqueReadHelper = new UniqueReadHelpers(customerRepository);
         }
         public void Call()
         {
             var doesContinue = true;
             Console.WriteLine("Enter customer pin:");
-            var pin = _personReadHelper.TryGetPin(false, ref doesContinue);
+            var pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter first name of the customer:");
