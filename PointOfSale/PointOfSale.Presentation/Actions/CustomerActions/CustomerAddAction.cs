@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;

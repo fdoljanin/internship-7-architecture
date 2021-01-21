@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using PointOfSale.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories.Abstractions;

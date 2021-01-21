@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using PointOfSale.Data.Enums;
 
 namespace PointOfSale.Data.Entities.Models

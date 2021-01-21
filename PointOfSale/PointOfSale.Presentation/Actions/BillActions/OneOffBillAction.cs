@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PointOfSale.Data.Entities.Models;
+using PointOfSale.Data.Enums;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
-using PointOfSale.Presentation.Helpers;
 using PointOfSale.Presentation.Helpers.EntityReadHelpers;
 
 namespace PointOfSale.Presentation.Actions.BillActions
@@ -37,11 +31,9 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
         public void Call()
         {
-            var bill = new Bill();
-            _billRepository.Add(bill);
+            var newBill = _billRepository.GetNewBill(BillType.Traditional);
 
             var doesContinue = true;
-            decimal totalCost = 0; //move to domain later
 
             //PrintHelpers.PrintOfferList(_articleBillRepository.GetAllAvailable());
             Console.WriteLine("Add articles:");
@@ -50,14 +42,13 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 var articleBill = _articleBillHelper.TryGetArticleBill(ref doesContinue);
                 if (!doesContinue) break;
 
-                totalCost += _articleBillRepository.GetPrice(articleBill.OfferId) * articleBill.Quantity;
-
-                if (_billRepository.CheckIsArticleThere(bill.Id, articleBill))
+                if (_articleBillRepository.CheckIsArticleThere(newBill.Id, articleBill))
                 {
                     Console.WriteLine("Article already in! Quantity added...");
                     continue;
                 }
-                articleBill.BillId = bill.Id;
+
+                articleBill.BillId = newBill.Id;
                 _articleBillRepository.Add(articleBill);
 
                 Console.WriteLine("Article added!");
@@ -70,15 +61,15 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 var serviceBill = _serviceBillHelper.TryGetService(ref doesContinue);
                 if (!doesContinue) break;
 
-                totalCost += _serviceBillRepository.GetPrice(serviceBill.OfferId) * serviceBill.Duration;
-                serviceBill.BillId = bill.Id;
+                serviceBill.BillId = newBill.Id;
                 _serviceBillRepository.Add(serviceBill);
 
                 Console.WriteLine("Service added!");
             }
 
-            _billRepository.FinishBill(bill.Id, totalCost, DateTime.Now);
+            var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
 
+            Console.WriteLine($"Cost: {billCost}");
             Console.ReadLine();
         }
     }

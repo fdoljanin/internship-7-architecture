@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PointOfSale.Data.Entities.Models;
+﻿using PointOfSale.Data.Entities.Models;
 
 namespace PointOfSale.Domain.Models
 {

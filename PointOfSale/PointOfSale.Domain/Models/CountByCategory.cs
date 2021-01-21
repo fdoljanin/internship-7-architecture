@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PointOfSale.Domain.Models
+﻿namespace PointOfSale.Domain.Models
 {
     public class CountByCategory
     {

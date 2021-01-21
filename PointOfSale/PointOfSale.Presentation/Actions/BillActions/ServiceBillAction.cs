@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
-using PointOfSale.Presentation.Helpers;
 using PointOfSale.Presentation.Helpers.EntityReadHelpers;
 
 namespace PointOfSale.Presentation.Actions.BillActions
@@ -31,23 +24,17 @@ namespace PointOfSale.Presentation.Actions.BillActions
         public void Call()
         {
             var doesContinue = true;
+            var newBill = _billRepository.GetNewBill(BillType.Service);
             //PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
 
             var service = _serviceBillHelper.TryGetService(ref doesContinue);
-            if (!doesContinue) return;
+            service.BillId = newBill.Id;
 
-
-
-            var bill = new Bill()
-            {
-                Type = BillType.Service,
-                TransactionDate = DateTime.Now,
-                Cost = _serviceBillRepository.GetPrice(service.OfferId) * service.Duration,
-            };
-            _billRepository.Add(bill);
-
-            service.BillId = bill.Id;
             _serviceBillRepository.Add(service);
+
+            var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
+            Console.WriteLine($"Cost: {billCost}");
+            Console.ReadLine();
 
         }
     }

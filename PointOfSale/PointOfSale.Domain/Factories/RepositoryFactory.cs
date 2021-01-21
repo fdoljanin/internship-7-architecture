@@ -1,14 +1,21 @@
 ﻿using System;
+using PointOfSale.Data.Entities;
 using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Domain.Factories
 {
     public static class RepositoryFactory
     {
+        static private PointOfSaleDbContext _context { get; set; }
+
+        static RepositoryFactory()
+        {
+            _context = DbContextFactory.GetPointOfSaleDbContext();
+        }
+
         public static TRepository GetRepository<TRepository>() where TRepository : BaseRepository
         {
-            var context = DbContextFactory.GetPointOfSaleDbContext();
-            return (TRepository)Activator.CreateInstance(typeof(TRepository), context);
+            return (TRepository)Activator.CreateInstance(typeof(TRepository), _context);
         }
     }
 }

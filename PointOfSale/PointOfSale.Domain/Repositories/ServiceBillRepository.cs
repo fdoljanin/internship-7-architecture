@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PointOfSale.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
@@ -23,10 +22,6 @@ namespace PointOfSale.Domain.Repositories
         {
             DbContext.ServiceBills.Add(serviceBill);
             SaveChanges();
-        }
-        public decimal GetPrice(int id)
-        {
-            return DbContext.Offers.Find(id).Price;
         }
     }
 }

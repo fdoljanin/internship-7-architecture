@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading;
-using System.Xml.Serialization;
+using System.Linq.Expressions;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
 
@@ -16,39 +15,38 @@ namespace PointOfSale.Domain.Repositories
         {
         }
 
-        public void Add(Bill bill)
+        public Bill GetNewBill(BillType billType)
         {
-            DbContext.Bills.Add(bill);
+            var newBill = new Bill();
+            DbContext.Bills.Add(newBill);
+            newBill.Type = billType;
             SaveChanges();
+            return newBill;
         }
 
-        public void FinishBill(int billId, decimal cost, DateTime transactionDate)
+        public decimal FinishBillAndGetCost(int billId)
         {
-            var billToFinish = DbContext.Bills.Find(billId);
-            billToFinish.Cost = cost;
-            billToFinish.TransactionDate = transactionDate;
-            
-            SaveChanges();
-        }
-
-        public bool CheckIsArticleThere(int billId, ArticleBill articleBill)
-        {
-            var isDuplicate = DbContext.Bills
+            var billDb = DbContext.Bills
                 .Include(b => b.ArticleBills)
-                .First(b => b.Id == billId)
-                .ArticleBills.Any(ab => ab.OfferId == articleBill.OfferId);
+                .ThenInclude(ab => ab.Offer)
+                .Include(b => b.ServiceBills)
+                .ThenInclude(sb => sb.Offer)
+                .First(b => b.Id == billId);
 
-            if (!isDuplicate) return false;
+            foreach (var articleBill in billDb.ArticleBills)
+            {
+                billDb.Cost += articleBill.Quantity * articleBill.Offer.Price;
+            }
 
-            var articleBillDb = DbContext.ArticleBills.
-                First(ab => ab.BillId == billId && ab.OfferId == articleBill.OfferId);
-            articleBillDb.Quantity += articleBill.Quantity;
+            foreach (var serviceBill in billDb.ServiceBills)
+            {
+                billDb.Cost += serviceBill.Duration * serviceBill.Offer.Price;
+            }
 
-            var articleDb = DbContext.Offers.Find(articleBill.OfferId);
-            articleDb.Quantity -= articleBill.Quantity;
-
+            billDb.TransactionDate = DateTime.Now;
             SaveChanges();
-            return true;
+
+            return billDb.Cost;
         }
 
         public decimal GetSubscriptionBill(int customerId)
@@ -96,14 +94,15 @@ namespace PointOfSale.Domain.Repositories
         {
             return DbContext.Bills
                 .Where(b => b.Type == billType && !b.Cancelled 
-                                               && b.TransactionDate >= range.start && b.TransactionDate <= range.end).ToList();
+                                               && b.TransactionDate >= range.start && b.TransactionDate <= range.end)
+                .ToList();
         }
 
         public ICollection<Bill> GetOfferTypeReport(OfferType offerType, (DateTime start, DateTime end) range)
         {
-            Func<Bill, bool> dateFilter = b =>
+            Expression<Func<Bill, bool>> dateFilter = b =>
                 (b.TransactionDate >= range.start && b.TransactionDate <= range.end);
-            Func<Bill, bool> typeFilter = default;
+            Expression<Func<Bill, bool>> typeFilter = default;
 
             switch (offerType)
             {

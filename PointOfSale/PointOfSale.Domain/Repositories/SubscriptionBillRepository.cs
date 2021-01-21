@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
 
@@ -24,9 +22,8 @@ namespace PointOfSale.Domain.Repositories
         public void AddSubscription(SubscriptionBill subscriptionBill)
         {
             DbContext.SubscriptionBills.Add(subscriptionBill);
-            SaveChanges();
             --subscriptionBill.Offer.Quantity;
-            DbContext.Entry(subscriptionBill.Offer).State = EntityState.Modified;
+
             SaveChanges();
         }
 

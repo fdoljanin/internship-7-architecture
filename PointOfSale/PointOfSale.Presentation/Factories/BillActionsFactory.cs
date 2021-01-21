@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using PointOfSale.Domain.Factories;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Actions;
 using PointOfSale.Presentation.Actions.BillActions;
-using PointOfSale.Presentation.Actions.SubscriptionActions;
 
 namespace PointOfSale.Presentation.Factories
 {

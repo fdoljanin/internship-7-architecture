@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using PointOfSale.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories.Abstractions;
@@ -26,10 +25,10 @@ namespace PointOfSale.Domain.Repositories
 
         public void Edit(int id, Customer editedCustomer)
         {
-            var customerToEdit = DbContext.Customers.First(c => c.Id == id);
-            customerToEdit.Pin = editedCustomer.Pin;
-            customerToEdit.FirstName = editedCustomer.FirstName;
-            customerToEdit.LastName = editedCustomer.LastName;
+            var customerDb = DbContext.Customers.First(c => c.Id == id);
+            customerDb.Pin = editedCustomer.Pin;
+            customerDb.FirstName = editedCustomer.FirstName;
+            customerDb.LastName = editedCustomer.LastName;
             SaveChanges();
         }
 

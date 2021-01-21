@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Actions;
-using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Helpers;
 
 namespace PointOfSale.Presentation.Extensions
 {
@@ -20,7 +20,14 @@ namespace PointOfSale.Presentation.Extensions
                     Console.WriteLine($"{action.MenuIndex}. {action.Label}");
                 }
 
-                var isInputInteger = int.TryParse(Console.ReadLine(), out var actionIndex);
+                var doesContinue = ReadHelpers.DoesContinue(out var input);
+                if (!doesContinue)
+                {
+                    exitActionSelected = true;
+                    continue;
+                }
+
+                var isInputInteger = int.TryParse(input, out var actionIndex);
                 if (isInputInteger)
                 {
                     var action = actions.FirstOrDefault(a => a.MenuIndex == actionIndex);

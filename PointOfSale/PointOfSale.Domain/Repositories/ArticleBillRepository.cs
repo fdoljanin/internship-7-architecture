@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -19,19 +18,35 @@ namespace PointOfSale.Domain.Repositories
         public void Add(ArticleBill articleBill)
         {
             DbContext.ArticleBills.Add(articleBill);
-            DbContext.Offers.Find(articleBill.OfferId).Quantity -= articleBill.Quantity;
+            DbContext.Offers.Find(articleBill.OfferId)
+                .Quantity -= articleBill.Quantity;
             
             SaveChanges();
         }
 
         public ICollection<Offer> GetAllAvailable()
         {
-            return DbContext.Offers.Where(o => o.Type == OfferType.Item && o.Quantity >0 && o.IsActive).ToList();
+            return DbContext.Offers
+                .Where(o => o.Type == OfferType.Item && o.Quantity > 0 && o.IsActive)
+                .ToList();
         }
 
-        public decimal GetPrice(int id)
+        public bool CheckIsArticleThere(int billId, ArticleBill articleBill)
         {
-            return DbContext.Offers.Find(id).Price;
+            var isDuplicate = DbContext.ArticleBills
+                .Any(ab => ab.BillId == billId && ab.OfferId == articleBill.OfferId);
+            if (!isDuplicate) return false;
+
+            var articleBillDb = DbContext.ArticleBills
+                .First(ab => ab.BillId == billId && ab.OfferId == articleBill.OfferId);
+
+            articleBillDb.Quantity += articleBill.Quantity;
+
+            var articleDb = DbContext.Offers.Find(articleBill.OfferId);
+            articleDb.Quantity -= articleBill.Quantity;
+
+            SaveChanges();
+            return true;
         }
 
         public ICollection<CountByCategory> GetCountByCategory()

@@ -28,12 +28,12 @@ namespace PointOfSale.Domain.Repositories
 
         public void Edit(int id, Employee editedEmployee)
         {
-            var employeeToEdit = DbContext.Employees.First(e => e.Id == id);
-            employeeToEdit.Pin = editedEmployee.Pin;
-            employeeToEdit.FirstName = editedEmployee.FirstName;
-            employeeToEdit.LastName = editedEmployee.LastName;
-            employeeToEdit.WorkStart = editedEmployee.WorkStart;
-            employeeToEdit.WorkEnd = editedEmployee.WorkEnd;
+            var employeeDb = DbContext.Employees.First(e => e.Id == id);
+            employeeDb.Pin = editedEmployee.Pin;
+            employeeDb.FirstName = editedEmployee.FirstName;
+            employeeDb.LastName = editedEmployee.LastName;
+            employeeDb.WorkStart = editedEmployee.WorkStart;
+            employeeDb.WorkEnd = editedEmployee.WorkEnd;
 
             SaveChanges();
         }
