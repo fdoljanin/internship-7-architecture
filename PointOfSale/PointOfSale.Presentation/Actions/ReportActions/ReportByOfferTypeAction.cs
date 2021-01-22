@@ -23,6 +23,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             var offerType = ReadHelpers.TryEnumParse<OfferType>(ref doesContinue);
             if (!doesContinue) return;
 
+            Console.WriteLine("Enter start (and end, sep by space) date:");
             var dateRange = ReadHelpers.GetDateRange(ref doesContinue);
             if (!doesContinue) return;
 

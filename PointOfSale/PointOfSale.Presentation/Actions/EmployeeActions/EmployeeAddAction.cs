@@ -22,32 +22,28 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
         public void Call()
         {
             var doesContinue = true;
+            var employee = new Employee();
+;
             Console.WriteLine("Enter employee pin:");
-            var pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
+            employee.Pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter first name of the employee:");
-            doesContinue = ReadHelpers.DoesContinue(out var firstName);
+            employee.FirstName = ReadHelpers.TryGetInput(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter last name of the employee:");
-            doesContinue = ReadHelpers.DoesContinue(out var lastName);
+            employee.LastName = ReadHelpers.TryGetInput(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter start (inclusive) and end (exclusive) of 24h work day in format hh hh:");
-            var workTime = ReadHelpers.TryGetWorkingHours(0, 24, ref doesContinue);
+            (employee.WorkStart, employee.WorkEnd) = ReadHelpers.TryGetWorkingHours(0, 24, ref doesContinue);
             if (!doesContinue) return;
 
+            _employeeRepository.Add(employee);
 
-            _employeeRepository.Add(
-                new Employee()
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Pin = pin,
-                    WorkStart = workTime.start,
-                    WorkEnd = workTime.end
-                });
+            Console.WriteLine("Employee added!");
+            Console.ReadLine();
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Helpers;
 using PointOfSale.Presentation.Helpers.EntityReadHelpers;
 
 namespace PointOfSale.Presentation.Actions.BillActions
@@ -25,21 +27,22 @@ namespace PointOfSale.Presentation.Actions.BillActions
             _articleBillRepository = articleBillRepository;
             _serviceBillRepository = serviceBillRepository;
 
-            _articleBillHelper = new ArticleBillHelpers(articleBillRepository);
-            _serviceBillHelper = new ServiceBillHelpers(serviceBillRepository, employeeRepository);
+            _articleBillHelper = new ArticleBillHelpers();
+            _serviceBillHelper = new ServiceBillHelpers(employeeRepository);
         }
 
         public void Call()
         {
+            var doesContinue = true;
             var newBill = _billRepository.GetNewBill(BillType.Traditional);
 
-            var doesContinue = true;
-
-            //PrintHelpers.PrintOfferList(_articleBillRepository.GetAllAvailable());
+            var articleList = _articleBillRepository.GetAllAvailable();
             Console.WriteLine("Add articles:");
+            PrintHelpers.PrintOfferList(articleList);
+
             while (true)
             {
-                var articleBill = _articleBillHelper.TryGetArticleBill(ref doesContinue);
+                var articleBill = _articleBillHelper.TryGetArticleBill(ref doesContinue, articleList);
                 if (!doesContinue) break;
 
                 if (_articleBillRepository.CheckIsArticleThere(newBill.Id, articleBill))
@@ -54,13 +57,24 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 Console.WriteLine("Article added!");
             }
 
-            //PrintHelpers.PrintOfferList(_serviceBillRepository.GetAll());
+            var serviceList = _serviceBillRepository.GetAll();
             Console.WriteLine("Add services:");
+
             while (true)
             {
-                var serviceBill = _serviceBillHelper.TryGetService(ref doesContinue);
+                var serviceBill = new ServiceBill();
+                PrintHelpers.PrintOfferList(serviceList);
+
+                Console.WriteLine("Enter service index:");
+
+                serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
+
+                var serviceBillInfo = _serviceBillHelper.TryGetServiceInfo(ref doesContinue);
                 if (!doesContinue) break;
 
+                serviceBill.StartTime = serviceBillInfo.StartTime;
+                serviceBill.Duration = serviceBillInfo.Duration;
+                serviceBill.EmployeeId = serviceBillInfo.EmployeeId;
                 serviceBill.BillId = newBill.Id;
                 _serviceBillRepository.Add(serviceBill);
 

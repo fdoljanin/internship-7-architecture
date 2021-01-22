@@ -22,16 +22,16 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         public void Call()
         {
             bool doesContinue = true;
-
+            var category = new Category();
+            
             Console.WriteLine("Enter category name:");
-            var name = _uniqueReadHelper.TryGetUniqueString(ref doesContinue);
+            category.Name = _uniqueReadHelper.TryGetUniqueString(ref doesContinue);
             if (!doesContinue) return;
-            _categoryRepository.Add(
-                new Category()
-                {
-                    Name = name
-                }
-                );
+
+            _categoryRepository.Add(category);
+
+            Console.WriteLine("Category added!");
+            Console.ReadLine();
         }
     }
 }

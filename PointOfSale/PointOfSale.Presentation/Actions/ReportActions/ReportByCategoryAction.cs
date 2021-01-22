@@ -25,6 +25,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             var billType = ReadHelpers.TryEnumParse<BillType>(ref doesContinue);
             if (!doesContinue) return;
 
+            Console.WriteLine("Enter start (and end, sep by space) date:");
             var dateRange = ReadHelpers.GetDateRange(ref doesContinue);
             if (!doesContinue) return;
 

@@ -22,25 +22,21 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
         public void Call()
         {
             var doesContinue = true;
+            var customer = new Customer();
+
             Console.WriteLine("Enter customer pin:");
-            var pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
+            customer.Pin = _uniqueReadHelper.TryGetUniquePin(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter first name of the customer:");
-            doesContinue = ReadHelpers.DoesContinue(out var firstName);
+            customer.FirstName = ReadHelpers.TryGetInput(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter last name of the customer:");
-            doesContinue = ReadHelpers.DoesContinue(out var lastName);
+            customer.LastName = ReadHelpers.TryGetInput(ref doesContinue);
             if (!doesContinue) return;
 
-            _customerRepository.Add(
-                new Customer()
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Pin = pin
-                });
+            _customerRepository.Add(customer);
         }
     }
 }

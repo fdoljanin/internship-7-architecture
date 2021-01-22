@@ -20,6 +20,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         {
             var doesContinue = true;
 
+            Console.WriteLine("Enter '<' or '>' sign and wanted quantity afterwards (eg >5):");
             var range = ReadHelpers.TryGetLessOrMore(ref doesContinue);
             if (!doesContinue) return;
 

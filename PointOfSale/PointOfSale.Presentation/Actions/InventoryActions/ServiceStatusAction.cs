@@ -18,12 +18,13 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
         public void Call()
         {
             var doesContinue = true;
-            while (true)
+            while (doesContinue)
             {
+                Console.WriteLine("Enter service duration in hours:");
                 var duration = ReadHelpers.TryIntParse(ref doesContinue, 1, 23);
                 if (!doesContinue) return;
 
-                doesContinue = ReadHelpers.DoesContinue(out var input);
+                var input = ReadHelpers.TryGetInput(ref doesContinue);
                 var doesParse = DateTime.TryParse(input, out var date);
                 if (!doesParse || date.Hour + duration > 23)
                 {
@@ -35,6 +36,8 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
                 var availableEmployees = _employeeRepository.GetAllAvailable(date, duration);
                 Console.WriteLine("Available employees:");
                 PrintHelpers.PrintPersonList(availableEmployees);
+
+                Console.ReadLine();
             }
         }
     }

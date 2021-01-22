@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -22,15 +21,20 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             var doesContinue = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
-            Console.WriteLine();
 
             Console.WriteLine("Enter offer index to delete:");
-            var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offerList.Count) - 1;
+            var offerToDelete = ReadHelpers.TryGetListMember(offerList, ref doesContinue);
             if (!doesContinue) return;
-            var offerToDelete = offerList.ElementAt(offerIndex);
 
             if (ReadHelpers.Confirm($"Are you sure you want to delete {offerToDelete.Name}? (yes/no)"))
+            {
                 _offerRepository.Delete(offerToDelete.Id);
+                Console.WriteLine("Offer deleted!");
+            }
+            else 
+                Console.WriteLine("Action cancelled!");
+
+            Console.ReadLine();
         }
     }
 }

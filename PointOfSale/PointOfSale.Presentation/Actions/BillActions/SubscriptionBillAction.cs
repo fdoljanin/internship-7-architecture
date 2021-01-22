@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -23,11 +22,11 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var doesContinue = true;
             var customerList = _customerRepository.GetAll();
             PrintHelpers.PrintPersonList(customerList);
-            Console.WriteLine("Enter customer index:");
-            var customerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, customerList.Count) - 1;
-            if (!doesContinue) return;
 
-            var customer = customerList.ElementAt(customerIndex);
+            Console.WriteLine("Enter customer index:");
+            var customer = ReadHelpers.TryGetListMember(customerList, ref doesContinue);
+            if (!doesContinue) return; 
+
             var price = _billRepository.GetSubscriptionBill(customer.Id);
             Console.WriteLine($"Price: {price}");
             Console.ReadLine();

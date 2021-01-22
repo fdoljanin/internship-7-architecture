@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -20,17 +19,18 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
         {
             var doesContinue = true;
             var activeSubscriptions = _subscriptionBillRepository.GetActiveSubscriptions();
-
-            Console.WriteLine("Enter index of subscription you want to cancel:");
             PrintHelpers.PrintSubscriptions(activeSubscriptions);
 
-            var chosenIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, activeSubscriptions.Count);
+            Console.WriteLine("Enter index of subscription you want to cancel:");
+            var chosenSubscription = ReadHelpers.TryGetListMember(activeSubscriptions, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to cancel subscription number {chosenIndex}")) return;
+            if (!ReadHelpers.Confirm($"Are you sure you want to cancel subscription?")) return;
 
-            _subscriptionBillRepository.CancelSubscription(activeSubscriptions.ElementAt(chosenIndex - 1).Id);
+            _subscriptionBillRepository.CancelSubscription(chosenSubscription.Id);
+
             Console.WriteLine("Cancelled!");
+            Console.ReadLine();
         }
     }
 }

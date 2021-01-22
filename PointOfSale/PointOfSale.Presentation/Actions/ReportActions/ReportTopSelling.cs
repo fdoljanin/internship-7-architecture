@@ -25,6 +25,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
                 topSell.Offer.Quantity = topSell.Quantity;
             }
 
+            Console.WriteLine("Top 10 selling:");
             PrintHelpers.PrintOfferList(topSelling.Select(ts => ts.Offer).ToList());
 
             Console.ReadLine();

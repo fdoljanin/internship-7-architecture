@@ -23,38 +23,34 @@ namespace PointOfSale.Presentation.Actions.OfferActions
         public void Call()
         {
             var doesContinue = true;
+            var offer = new Offer()
+            {
+                IsActive = true
+            };
 
             Console.WriteLine("Enter type (Item, Service, Rent):");
-            var type = ReadHelpers.TryEnumParse<OfferType>(ref doesContinue);
+            offer.Type = ReadHelpers.TryEnumParse<OfferType>(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter name of product:");
-            var name = _uniqueReadHelper.TryGetUniqueString(ref doesContinue);
+            offer.Name = _uniqueReadHelper.TryGetUniqueString(ref doesContinue);
             if (!doesContinue) return;
 
             Console.WriteLine("Enter price, which is not negative:");
-            var price = ReadHelpers.TryDecimalParse(ref doesContinue, 0);
+            offer.Price = ReadHelpers.TryDecimalParse(ref doesContinue, 0);
             if (!doesContinue) return;
 
-            var quantity = -1;
-            if (type != OfferType.Service)
+            if (offer.Type != OfferType.Service)
             {
                 Console.WriteLine("Enter quantity, which is not negative:");
-                quantity = ReadHelpers.TryIntParse(ref doesContinue, 0);
+                offer.Quantity = ReadHelpers.TryIntParse(ref doesContinue, 0);
                 if (!doesContinue) return;
             }
-            _offerRepository.Add(
-                new Offer()
-                {
-                    Type = type,
-                    Name = name,
-                    Price = price,
-                    Quantity = quantity,
-                    IsActive = true
-                }
-                );
+
+            _offerRepository.Add(offer);
+
             Console.WriteLine("Success!");
-            
+            Console.ReadLine();
         }
     }
 }

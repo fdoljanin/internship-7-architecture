@@ -1,23 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
-using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
     public class ArticleBillHelpers
     {
-        private ArticleBillRepository _articleBillRepository;
-
-        public ArticleBillHelpers(ArticleBillRepository articleBillRepository)
-        {
-            _articleBillRepository = articleBillRepository;
-        }
         private (int index, int quantity) TryGetIndexAndQuantity(ref bool doesContinue, int maxIndex)
         {
             while (true)
             {
-                doesContinue = ReadHelpers.DoesContinue(out var input);
+                var input = ReadHelpers.TryGetInput(ref doesContinue);
+
                 if (!doesContinue) return (default, default);
                 if (!input.Contains('x'))
                 {
@@ -37,24 +32,24 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
         }
 
 
-        public ArticleBill TryGetArticleBill(ref bool doesContinue)
+        public ArticleBill TryGetArticleBill(ref bool doesContinue, ICollection<Offer> articleList)
         {
+            var articleBill = new ArticleBill();
+
             while (true)
             {
-                var articleList = _articleBillRepository.GetAllAvailable();
-                PrintHelpers.PrintOfferList(articleList);
-
                 var (articleIndex, quantity) = TryGetIndexAndQuantity(ref doesContinue, articleList.Count);
                 if (!doesContinue) return default;
+                articleBill.Quantity = quantity;
 
                 var article = articleList.ElementAt(articleIndex);
+                articleBill.OfferId = article.Id;
 
                 if (quantity <= article.Quantity)
-                    return new ArticleBill()
-                    {
-                        OfferId = article.Id,
-                        Quantity = quantity
-                    };
+                {
+                    return articleBill;
+                }
+
                 Console.WriteLine("Article not available in that quantity!");
             }
         }

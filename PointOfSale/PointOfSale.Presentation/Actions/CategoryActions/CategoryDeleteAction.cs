@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -24,10 +23,9 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             PrintHelpers.PrintCategories(categoryList);
 
             Console.WriteLine("Enter index of category to delete:");
-            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
+            var categoryToDelete = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
 
-            var categoryToDelete = categoryList.ElementAt(categoryIndex);
             if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}?")) return;
             _categoryRepository.Delete(categoryToDelete.Id);
         }

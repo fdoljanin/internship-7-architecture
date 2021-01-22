@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PointOfSale.Presentation.Extensions;
 
 namespace PointOfSale.Presentation.Helpers
@@ -11,11 +13,18 @@ namespace PointOfSale.Presentation.Helpers
             return input != "";
         }
 
+        public static string TryGetInput(ref bool doesContinue)
+        {
+            var input = Console.ReadLine().Trim();
+            doesContinue = input != "";
+            return input;
+        }
+
         public static int TryIntParse(ref bool doesContinue, int lowerBound = int.MinValue, int upperBound = int.MaxValue)
         {
             while (true)
             {
-                doesContinue = DoesContinue(out var input);
+                var input = TryGetInput(ref doesContinue);
                 var doesParse = int.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound || number > upperBound))
                 {
@@ -29,7 +38,7 @@ namespace PointOfSale.Presentation.Helpers
         {
             while (true)
             {
-                doesContinue = DoesContinue(out var input);
+                var input = TryGetInput(ref doesContinue);
                 var doesParse = decimal.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound))
                 {
@@ -45,7 +54,7 @@ namespace PointOfSale.Presentation.Helpers
         {
             while (true)
             {
-                doesContinue = DoesContinue(out var input);
+                var input = TryGetInput(ref doesContinue);
                 if (!doesContinue) return default;
                 var doesParse = Enum.TryParse(typeof(TEnum), input.Capitalize(), out var result);
                 if (doesContinue && (!doesParse || int.TryParse(input, out _)))
@@ -77,12 +86,12 @@ namespace PointOfSale.Presentation.Helpers
             return true;
         }
 
-        public static (int start, int end) TryGetWorkingHours(int min, int max, ref bool continues)
+        public static (int start, int end) TryGetWorkingHours(int min, int max, ref bool doesContinue)
         {
             while (true)
             {
-                continues = DoesContinue(out var input);
-                if (!continues) return (-1, -1);
+                var input = TryGetInput(ref doesContinue);
+                if (!doesContinue) return (-1, -1);
                 var hours = input.Split();
                 if (hours.Length != 2)
                 {
@@ -118,7 +127,7 @@ namespace PointOfSale.Presentation.Helpers
         {
             while (true)
             {
-                doesContinue = ReadHelpers.DoesContinue(out var input);
+                var input = TryGetInput(ref doesContinue);
                 if (!doesContinue) return (default, default);
                 var dates = input.Split();
 
@@ -148,7 +157,7 @@ namespace PointOfSale.Presentation.Helpers
         {
             while (true)
             {
-                doesContinue = ReadHelpers.DoesContinue(out var input);
+                var input = TryGetInput(ref doesContinue);
                 if (!doesContinue) return (default, default);
 
                 var doesParse = int.TryParse(input.Substring(1), out var number);
@@ -163,6 +172,12 @@ namespace PointOfSale.Presentation.Helpers
 
                 Console.WriteLine("Input not valid!");
             }
+        }
+
+        public static TEntity TryGetListMember<TEntity>(ICollection<TEntity> entityList, ref bool doesContinue)
+        {
+            var entityIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, entityList.Count) - 1;
+            return doesContinue ? entityList.ElementAt(entityIndex) : default;
         }
     }
 }

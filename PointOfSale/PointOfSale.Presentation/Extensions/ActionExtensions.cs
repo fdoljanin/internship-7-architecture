@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Actions;
-using PointOfSale.Presentation.Helpers;
 
 namespace PointOfSale.Presentation.Extensions
 {
@@ -20,8 +19,10 @@ namespace PointOfSale.Presentation.Extensions
                     Console.WriteLine($"{action.MenuIndex}. {action.Label}");
                 }
 
-                var doesContinue = ReadHelpers.DoesContinue(out var input);
-                if (!doesContinue)
+                Console.WriteLine("Press enter in any point in program to return.");
+
+                var input = Console.ReadLine().Trim();
+                if (input == "")
                 {
                     exitActionSelected = true;
                     continue;

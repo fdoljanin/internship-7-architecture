@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -25,12 +24,10 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             var isNotBlank = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
-            Console.WriteLine();
 
             Console.WriteLine("Enter offer index:");
-            var offerIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, offerList.Count) - 1;
+            var offerToEdit = ReadHelpers.TryGetListMember(offerList, ref isNotBlank);
             if (!isNotBlank) return;
-            var offerToEdit = offerList.ElementAt(offerIndex);
 
             Console.WriteLine($"Enter new name of the offer, enter for default ({offerToEdit.Name}):");
             var newName = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
@@ -42,7 +39,9 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             offerToEdit.Price = isNotBlank ? newPrice : offerToEdit.Price;
 
             _offerRepository.Edit(offerToEdit.Id, offerToEdit);
+
             Console.WriteLine("Offer edited!");
+            Console.ReadLine();
         }
     }
 }

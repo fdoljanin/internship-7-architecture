@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -26,21 +24,16 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var isNotBlank = true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+
             Console.WriteLine("Enter index of category to edit:");
-            var categoryIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, categoryList.Count) -1 ;
-            if (!isNotBlank) return;
-            var categoryToEdit = categoryList.ElementAt(categoryIndex);
-            
-            Console.WriteLine($"Enter new category name, enter for default ({categoryToEdit.Name}):");
-            var newName = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
+            var categoryToEdit = ReadHelpers.TryGetListMember(categoryList, ref isNotBlank);
             if (!isNotBlank) return;
 
-            _categoryRepository.Edit(categoryToEdit.Id,
-                new Category()
-                {
-                    Name = newName
-                }
-                );
+            Console.WriteLine($"Enter new category name, enter for default ({categoryToEdit.Name}):");
+            categoryToEdit.Name = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
+            if (!isNotBlank) return;
+
+            _categoryRepository.Edit(categoryToEdit.Id, categoryToEdit);
         }
     }
 }

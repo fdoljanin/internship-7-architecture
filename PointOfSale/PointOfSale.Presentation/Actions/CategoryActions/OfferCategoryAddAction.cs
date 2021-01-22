@@ -26,14 +26,14 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var doesContinue= true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+
             Console.WriteLine("Enter index of category to insert elements into:");
-            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
+            var category = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
-            var category = categoryList.ElementAt(categoryIndex);
 
             var offersOutside = _offerCategoryRepository.GetOfferList(category.Id, false).ToList();
-            
             PrintHelpers.PrintOfferList(offersOutside);
+
             while (true)
             {
                 Console.WriteLine($"Enter index of offer you want to add into {category.Name}:");
@@ -57,6 +57,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
                     }
                     );
 
+                Console.WriteLine("Added!");
                 offersOutside[offerIndex] = null;
             }
         }

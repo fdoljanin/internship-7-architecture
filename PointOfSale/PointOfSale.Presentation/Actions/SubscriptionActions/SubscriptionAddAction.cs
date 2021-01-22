@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
@@ -26,31 +25,27 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
         public void Call()
         { 
             var doesContinue = true;
-            var customerList = _customerRepository.GetAll();
+            var subscriptionBill = new SubscriptionBill();
 
+            var customerList = _customerRepository.GetAll();
             PrintHelpers.PrintPersonList(customerList);
 
             Console.WriteLine("Enter customer index:"); //if store is big, implement search by pin
-            var customerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, customerList.Count) - 1;
-            if (!doesContinue) return;
-            var customer = customerList.ElementAt(customerIndex);
-
-            var subscriptionList = _subscriptionBillRepository.GetAllAvailable();
-            PrintHelpers.PrintOfferList(subscriptionList);
-
-            Console.WriteLine("Enter subscription index:");
-            var subscriptionIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, subscriptionList.Count) -1;
+            var customer = ReadHelpers.TryGetListMember(customerList, ref doesContinue);
             if (!doesContinue) return;
 
-            var subscription = subscriptionList.ElementAt(subscriptionIndex);
+            var offerSubscriptionList = _subscriptionBillRepository.GetAllAvailable();
+            PrintHelpers.PrintOfferList(offerSubscriptionList);
 
-            _subscriptionBillRepository.AddSubscription(
-            new SubscriptionBill()
-            {
-                CustomerId = customer.Id,
-                OfferId = subscription.Id,
-                StartTime = DateTime.Now,
-            });
+            Console.WriteLine("Enter offer index:");
+            var offerSubscription = ReadHelpers.TryGetListMember(offerSubscriptionList, ref doesContinue);
+            if (!doesContinue) return;
+
+            subscriptionBill.OfferId = offerSubscription.Id;
+            subscriptionBill.CustomerId = customer.Id;
+            subscriptionBill.StartTime = DateTime.Now;
+
+            _subscriptionBillRepository.AddSubscription(subscriptionBill);
         }
     }
 }

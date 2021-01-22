@@ -26,14 +26,14 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var doesContinue = true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+
             Console.WriteLine("Enter index of category to delete elements from:");
-            var categoryIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, categoryList.Count) - 1;
+            var category = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
-            var category = categoryList.ElementAt(categoryIndex);
 
             var offersInside = _offerCategoryRepository.GetOfferList(category.Id, true).ToList();
-
             PrintHelpers.PrintOfferList(offersInside);
+
             while (true)
             {
                 Console.WriteLine($"Enter index of offer you want to delete from {category.Name}:");
@@ -51,6 +51,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
                 _offerCategoryRepository.Delete(offer.Id, category.Id);
 
+                Console.WriteLine("Added!");
                 offersInside[offerIndex] = null;
             }
         }

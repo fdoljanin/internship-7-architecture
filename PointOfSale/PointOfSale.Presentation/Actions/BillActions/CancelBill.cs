@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Helpers;
@@ -19,18 +18,20 @@ namespace PointOfSale.Presentation.Actions.BillActions
         public void Call()
         {
             var doesContinue = true;
-            var bills = _billRepository.GetBills();
+            var billList = _billRepository.GetBills();
 
             Console.WriteLine("Choose bill index to delete");
-            PrintHelpers.PrintBills(bills);
+            PrintHelpers.PrintBills(billList);
 
-            var chosenIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, bills.Count);
+            var chosenBill = ReadHelpers.TryGetListMember(billList, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to delete bill number {chosenIndex}")) return;
+            if (!ReadHelpers.Confirm($"Are you sure you want to delete bill?")) return;
 
-            _billRepository.CancelBill(bills.ElementAt(chosenIndex-1).Id);
+            _billRepository.CancelBill(chosenBill.Id);
+
             Console.WriteLine("Cancelled!");
+            Console.ReadLine();
         }
     }
 }

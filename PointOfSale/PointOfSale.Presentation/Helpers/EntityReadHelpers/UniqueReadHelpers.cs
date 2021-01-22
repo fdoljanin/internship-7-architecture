@@ -15,7 +15,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
         {
             while (true)
             {
-                doesContinue = ReadHelpers.DoesContinue(out var inputString);
+                var inputString = ReadHelpers.TryGetInput(ref doesContinue);
                 var unique = _repositoryToCheck.IsStringUnique(inputString);
                 if (unique || !doesContinue) return inputString;
                 Console.WriteLine("It should be unique!");

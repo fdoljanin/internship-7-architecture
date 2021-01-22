@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
@@ -22,30 +21,31 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
         }
         public void Call()
         {
+            var isNotBlank = true;
             var customerEdited = new Customer();
             var customerList = _customerRepository.GetAll();
-
             PrintHelpers.PrintPersonList(customerList);
-            var isNotBlank = true;
-            Console.WriteLine("Enter index of customer you want to edit:");
-            var customerIndex = ReadHelpers.TryIntParse(ref isNotBlank, 1, customerList.Count) - 1;
-            if (!isNotBlank) return;
 
-            var customerToEdit = customerList.ElementAt(customerIndex);
+            Console.WriteLine("Enter index of customer you want to edit:");
+            var customerToEdit = ReadHelpers.TryGetListMember(customerList, ref isNotBlank);
+            if (!isNotBlank) return;
 
             Console.WriteLine($"New pin, enter for default ({customerToEdit.Pin}):");
             var newPin = _uniqueReadHelper.TryGetUniquePin(ref isNotBlank);
             customerEdited.Pin = isNotBlank ? newPin : customerToEdit.Pin;
 
             Console.WriteLine($"First name of the customer, enter for default ({customerToEdit.FirstName}):");
-            isNotBlank = ReadHelpers.DoesContinue(out var newFirstName);
+            var newFirstName = ReadHelpers.TryGetInput(ref isNotBlank);
             customerEdited.FirstName = isNotBlank ? newFirstName : customerToEdit.FirstName;
 
             Console.WriteLine($"Last name of the customer, enter for default ({customerToEdit.LastName}):");
-            isNotBlank = ReadHelpers.DoesContinue(out var newLastName);
+            var newLastName = ReadHelpers.TryGetInput(ref isNotBlank);
             customerEdited.LastName = isNotBlank ? newLastName : customerToEdit.LastName;
 
             _customerRepository.Edit(customerToEdit.Id, customerEdited);
+
+            Console.WriteLine("Customer edited!");
+            Console.ReadLine();
         }
     }
 }

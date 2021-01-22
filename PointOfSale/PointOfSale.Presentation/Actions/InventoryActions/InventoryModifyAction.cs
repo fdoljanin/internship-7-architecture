@@ -21,16 +21,14 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
         public void Call()
         {
             var doesContinue = true;
-            var offers = _offerRepository.GetAll().Where(o => o.Type != OfferType.Service).ToList();
+            var offerList = _offerRepository.GetAll().Where(o => o.Type != OfferType.Service).ToList();
 
-            PrintHelpers.PrintOfferList(offers);
+            PrintHelpers.PrintOfferList(offerList);
 
             while (true)
             {
                 Console.WriteLine("Enter offer index");
-                var offerIndex = ReadHelpers.TryIntParse(ref doesContinue, 1, offers.Count) - 1;
-                if (!doesContinue) return;
-                var offer = offers.ElementAt(offerIndex);
+                var offer = ReadHelpers.TryGetListMember(offerList, ref doesContinue);
 
                 Console.WriteLine($"Enter new quantity for {offer.Name} (old: {offer.Quantity}):");
                 var newQuantity = ReadHelpers.TryIntParse(ref doesContinue, 0);
@@ -38,6 +36,8 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
 
                 offer.Quantity = newQuantity;
                 _offerRepository.Edit(offer.Id, offer);
+
+                Console.WriteLine("Quantity modified!");
             }
         }
     }
