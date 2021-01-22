@@ -12,13 +12,13 @@ namespace PointOfSale.Presentation.Actions.BillActions
     {
         private readonly ServiceBillRepository _serviceBillRepository;
         private readonly BillRepository _billRepository;
-        private readonly ServiceBillHelpers _serviceBillHelper;
+        private readonly EmployeeRepository _employeeRepository;
         public ServiceBillAction(ServiceBillRepository serviceBillRepository, 
             BillRepository billRepository, EmployeeRepository employeeRepository)
         {
             _serviceBillRepository = serviceBillRepository;
-            _serviceBillHelper = new ServiceBillHelpers(employeeRepository);
             _billRepository = billRepository;
+            _employeeRepository = employeeRepository;
         }
 
         public int MenuIndex { get; set; }
@@ -36,7 +36,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
             serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
             if (!doesContinue) return;
-            var serviceBillInfo = _serviceBillHelper.TryGetServiceInfo(ref doesContinue);
+            var serviceBillInfo = ServiceBillHelpers.TryGetServiceInfo(_employeeRepository, ref doesContinue);
             if (!doesContinue) return;
 
             serviceBill.StartTime = serviceBillInfo.StartTime;

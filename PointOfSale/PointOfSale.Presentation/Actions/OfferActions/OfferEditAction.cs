@@ -9,14 +9,12 @@ namespace PointOfSale.Presentation.Actions.OfferActions
     public class OfferEditAction : IAction
     {
         private readonly OfferRepository _offerRepository;
-        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit offer";
 
         public OfferEditAction(OfferRepository offerRepository)
         {
             _offerRepository = offerRepository;
-            _uniqueReadHelper = new UniqueReadHelpers(offerRepository);
         }
 
         public void Call()
@@ -30,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             if (!isNotBlank) return;
 
             Console.WriteLine($"Enter new name of the offer, enter for default ({offerToEdit.Name}):");
-            var newName = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
+            var newName = UniqueReadHelpers.TryGetUniqueString(_offerRepository, ref isNotBlank);
             offerToEdit.Name = isNotBlank ? newName : offerToEdit.Name;
 
 

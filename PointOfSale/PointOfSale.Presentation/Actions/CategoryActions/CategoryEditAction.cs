@@ -9,14 +9,12 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
     public class CategoryEditAction : IAction
     {
         private readonly CategoryRepository _categoryRepository;
-        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Category";
 
         public CategoryEditAction(CategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _uniqueReadHelper = new UniqueReadHelpers(categoryRepository);
         }
 
         public void Call()
@@ -30,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             if (!isNotBlank) return;
 
             Console.WriteLine($"Enter new category name, enter for default ({categoryToEdit.Name}):");
-            categoryToEdit.Name = _uniqueReadHelper.TryGetUniqueString(ref isNotBlank);
+            categoryToEdit.Name = UniqueReadHelpers.TryGetUniqueString(_categoryRepository, ref isNotBlank);
             if (!isNotBlank) return;
 
             _categoryRepository.Edit(categoryToEdit.Id, categoryToEdit);

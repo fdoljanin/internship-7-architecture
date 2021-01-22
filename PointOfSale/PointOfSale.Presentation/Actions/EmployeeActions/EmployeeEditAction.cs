@@ -10,14 +10,12 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
     public class EmployeeEditAction : IAction
     {
         private readonly EmployeeRepository _employeeRepository;
-        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Employee";
 
         public EmployeeEditAction(EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _uniqueReadHelper = new UniqueReadHelpers(employeeRepository);
         }
         public void Call()
         {
@@ -30,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
             var employeeToEdit = ReadHelpers.TryGetListMember(employeeList, ref isNotBlank);
 
             Console.WriteLine($"New pin, enter for default ({employeeToEdit.Pin}):");
-            var newPin = _uniqueReadHelper.TryGetUniquePin(ref isNotBlank);
+            var newPin = UniqueReadHelpers.TryGetUniquePin(_employeeRepository,ref isNotBlank);
             employeeEdited.Pin = isNotBlank ? newPin : employeeToEdit.Pin;
 
             Console.WriteLine($"First name of the employee, enter for default ({employeeToEdit.FirstName}):");

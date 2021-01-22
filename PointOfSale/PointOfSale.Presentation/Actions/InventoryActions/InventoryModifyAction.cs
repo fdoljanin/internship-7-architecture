@@ -29,6 +29,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
             {
                 Console.WriteLine("Enter offer index");
                 var offer = ReadHelpers.TryGetListMember(offerList, ref doesContinue);
+                if (!doesContinue) return;
 
                 Console.WriteLine($"Enter new quantity for {offer.Name} (old: {offer.Quantity}):");
                 var newQuantity = ReadHelpers.TryIntParse(ref doesContinue, 0);

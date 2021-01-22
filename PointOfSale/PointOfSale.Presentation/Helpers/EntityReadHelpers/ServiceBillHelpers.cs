@@ -6,17 +6,11 @@ using PointOfSale.Domain.Repositories;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
-    public class ServiceBillHelpers
+    public static class ServiceBillHelpers
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private static EmployeeRepository _employeeRepository { get; set; }
 
-        public ServiceBillHelpers(EmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
-
-
-        private (DateTime serviceStart, ICollection<Employee> availableEmployees) 
+        private static (DateTime serviceStart, ICollection<Employee> availableEmployees) 
             TryGetTime(int lengthInHours, ref bool doesContinue)
         {
             while (true)
@@ -41,15 +35,17 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
         }
 
 
-        public ServiceBill TryGetServiceInfo(ref bool doesContinue)
+        public static ServiceBill TryGetServiceInfo(EmployeeRepository employeeRepository, ref bool doesContinue)
         {
+            _employeeRepository = employeeRepository;
+
             Console.WriteLine("Enter service duration in hours:");
             var durationInHours = ReadHelpers.TryIntParse(ref doesContinue, 1, 23);
             if (!doesContinue) return null;
 
             var doesRestart = false;
             var (startTime, availableEmployees) = TryGetTime(durationInHours, ref doesRestart);
-            if (!doesRestart) return TryGetServiceInfo(ref doesContinue);
+            if (!doesRestart) return TryGetServiceInfo(employeeRepository, ref doesContinue);
 
             PrintHelpers.PrintPersonList(availableEmployees);
 

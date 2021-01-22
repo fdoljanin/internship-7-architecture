@@ -16,9 +16,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
         private readonly BillRepository _billRepository;
         private readonly ArticleBillRepository _articleBillRepository;
         private readonly ServiceBillRepository _serviceBillRepository;
-
-        private readonly ArticleBillHelpers _articleBillHelper;
-        private readonly ServiceBillHelpers _serviceBillHelper;
+        private readonly EmployeeRepository _employeeRepository;
 
         public OneOffBillAction(BillRepository billRepository, ArticleBillRepository articleBillRepository,
             ServiceBillRepository serviceBillRepository, EmployeeRepository employeeRepository)
@@ -26,9 +24,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
             _billRepository = billRepository;
             _articleBillRepository = articleBillRepository;
             _serviceBillRepository = serviceBillRepository;
-
-            _articleBillHelper = new ArticleBillHelpers();
-            _serviceBillHelper = new ServiceBillHelpers(employeeRepository);
+            _employeeRepository = employeeRepository;
         }
 
         public void Call()
@@ -42,7 +38,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
             while (true)
             {
-                var articleBill = _articleBillHelper.TryGetArticleBill(ref doesContinue, articleList);
+                var articleBill = ArticleBillHelpers.TryGetArticleBill(articleList, ref doesContinue);
                 if (!doesContinue) break;
 
                 if (_articleBillRepository.CheckIsArticleThere(newBill.Id, articleBill))
@@ -69,7 +65,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
                 serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
 
-                var serviceBillInfo = _serviceBillHelper.TryGetServiceInfo(ref doesContinue);
+                var serviceBillInfo = ServiceBillHelpers.TryGetServiceInfo(_employeeRepository, ref doesContinue);
                 if (!doesContinue) break;
 
                 serviceBill.StartTime = serviceBillInfo.StartTime;

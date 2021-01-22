@@ -10,14 +10,12 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
     public class CustomerEditAction : IAction
     {
         private readonly CustomerRepository _customerRepository;
-        private readonly UniqueReadHelpers _uniqueReadHelper;
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Edit Customer";
 
         public CustomerEditAction(CustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
-            _uniqueReadHelper = new UniqueReadHelpers(customerRepository);
         }
         public void Call()
         {
@@ -31,7 +29,7 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
             if (!isNotBlank) return;
 
             Console.WriteLine($"New pin, enter for default ({customerToEdit.Pin}):");
-            var newPin = _uniqueReadHelper.TryGetUniquePin(ref isNotBlank);
+            var newPin = UniqueReadHelpers.TryGetUniquePin(_customerRepository ,ref isNotBlank);
             customerEdited.Pin = isNotBlank ? newPin : customerToEdit.Pin;
 
             Console.WriteLine($"First name of the customer, enter for default ({customerToEdit.FirstName}):");

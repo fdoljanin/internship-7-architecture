@@ -5,9 +5,9 @@ using PointOfSale.Data.Entities.Models;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {
-    public class ArticleBillHelpers
+    public static class ArticleBillHelpers
     {
-        private (int index, int quantity) TryGetIndexAndQuantity(ref bool doesContinue, int maxIndex)
+        private static (int index, int quantity) TryGetIndexAndQuantity(ref bool doesContinue, int maxIndex)
         {
             while (true)
             {
@@ -32,7 +32,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
         }
 
 
-        public ArticleBill TryGetArticleBill(ref bool doesContinue, ICollection<Offer> articleList)
+        public static ArticleBill TryGetArticleBill(ICollection<Offer> articleList, ref bool doesContinue)
         {
             var articleBill = new ArticleBill();
 
