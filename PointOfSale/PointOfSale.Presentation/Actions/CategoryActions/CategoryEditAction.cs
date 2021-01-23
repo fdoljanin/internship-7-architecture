@@ -22,6 +22,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var isNotBlank = true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+            if (categoryList.Count == 0) return;
 
             Console.WriteLine("Enter index of category to edit:");
             var categoryToEdit = ReadHelpers.TryGetListMember(categoryList, ref isNotBlank);

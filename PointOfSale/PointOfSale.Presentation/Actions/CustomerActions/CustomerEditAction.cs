@@ -23,6 +23,7 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
             var customerEdited = new Customer();
             var customerList = _customerRepository.GetAll();
             PrintHelpers.PrintPersonList(customerList);
+            if (customerList.Count == 0) return;
 
             Console.WriteLine("Enter index of customer you want to edit:");
             var customerToEdit = ReadHelpers.TryGetListMember(customerList, ref isNotBlank);

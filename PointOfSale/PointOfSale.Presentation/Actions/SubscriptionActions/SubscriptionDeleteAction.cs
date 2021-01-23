@@ -20,6 +20,7 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
             var doesContinue = true;
             var activeSubscriptions = _subscriptionBillRepository.GetActiveSubscriptions();
             PrintHelpers.PrintSubscriptions(activeSubscriptions);
+            if (activeSubscriptions.Count == 0) return;
 
             Console.WriteLine("Enter index of subscription you want to cancel:");
             var chosenSubscription = ReadHelpers.TryGetListMember(activeSubscriptions, ref doesContinue);

@@ -21,6 +21,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var doesContinue = true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+            if (categoryList.Count == 0) return;
 
             Console.WriteLine("Enter index of category to delete:");
             var categoryToDelete = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);

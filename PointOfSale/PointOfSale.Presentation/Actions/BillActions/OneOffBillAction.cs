@@ -35,6 +35,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var articleList = _articleBillRepository.GetAllAvailable();
             Console.WriteLine("Add articles:");
             PrintHelpers.PrintOfferList(articleList);
+            if (articleList.Count == 0) goto Service;
 
             while (true)
             {
@@ -53,6 +54,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 Console.WriteLine("Article added!\n");
             }
 
+            Service:
             var serviceList = _serviceBillRepository.GetAll();
             Console.WriteLine("Add services:");
 
@@ -60,14 +62,22 @@ namespace PointOfSale.Presentation.Actions.BillActions
             {
                 var serviceBill = new ServiceBill();
                 PrintHelpers.PrintOfferList(serviceList);
+                if (serviceList.Count == 0) goto Bill;
+                if (serviceList.Count == 0)
+                {
+                    MessageHelpers.NotAvailable("No customers found!");
+                    return;
+                }
 
                 Console.WriteLine("Enter service index:");
 
-                serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
+                var chosenService = ReadHelpers.TryGetListMember(serviceList, ref doesContinue);
+                if (!doesContinue) break;
 
                 var serviceBillInfo = ServiceBillHelpers.TryGetServiceInfo(_employeeRepository, ref doesContinue);
                 if (!doesContinue) break;
 
+                serviceBill.OfferId = chosenService.Id;
                 serviceBill.StartTime = serviceBillInfo.StartTime;
                 serviceBill.Duration = serviceBillInfo.Duration;
                 serviceBill.EmployeeId = serviceBillInfo.EmployeeId;
@@ -76,8 +86,16 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
                 Console.WriteLine("Service added!\n");
             }
-
+            
+            Bill:
             var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
+
+            if (billCost == 0)
+            {
+                MessageHelpers.Error("Bill is empty and won't be created!");
+                Console.ReadLine();
+                return;
+            }
 
             MessageHelpers.Success("Bill created!");
             Console.WriteLine($"Cost: {billCost}");

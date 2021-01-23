@@ -26,13 +26,15 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var doesContinue= true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+            if (categoryList.Count == 0) return;
 
-            Console.WriteLine("Enter index of category to insert elements into:");
+            Console.WriteLine("Enter index of category to insert offers into:");
             var category = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
 
             var offersOutside = _offerCategoryRepository.GetOfferList(category.Id, false).ToList();
             PrintHelpers.PrintOfferList(offersOutside);
+            if (offersOutside.Count == 0) return;
 
             while (true)
             {

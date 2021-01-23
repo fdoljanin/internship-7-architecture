@@ -23,6 +23,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
             var employeeEdited = new Employee();
             var employeeList = _employeeRepository.GetAll();
             PrintHelpers.PrintPersonList(employeeList);
+            if (employeeList.Count == 0) return;
 
             Console.WriteLine("Enter index of employee you want to edit:");
             var employeeToEdit = ReadHelpers.TryGetListMember(employeeList, ref isNotBlank);

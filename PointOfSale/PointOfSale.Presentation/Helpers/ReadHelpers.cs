@@ -19,7 +19,11 @@ namespace PointOfSale.Presentation.Helpers
             while (true)
             {
                 var input = TryGetInput(ref doesContinue);
+                if (!doesContinue) return default;
+
+                if (input.Last() == '.') input = input.Remove(input.Length - 1); 
                 var doesParse = int.TryParse(input, out var number);
+
                 if (doesContinue && (!doesParse || number < lowerBound || number > upperBound))
                 {
                     MessageHelpers.Error("Input not valid!");
@@ -63,7 +67,7 @@ namespace PointOfSale.Presentation.Helpers
         public static bool Confirm(string message)
         {
             MessageHelpers.Confirm(message);
-            var input = Console.ReadLine().Trim();
+            var input = Console.ReadLine().Trim().ToLower();
             if (input == "yes") return true;
             if (input == "no") return false;
             MessageHelpers.Error("Input is not valid, choose yes/no!");

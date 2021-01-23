@@ -15,6 +15,7 @@ namespace PointOfSale.Presentation.Factories
             {
                 new CustomerAddAction(RepositoryFactory.GetRepository<CustomerRepository>()),
                 new CustomerEditAction(RepositoryFactory.GetRepository<CustomerRepository>()),
+                new CustomerDeleteAction(RepositoryFactory.GetRepository<CustomerRepository>()),
                 new ExitMenuAction()
             };
 

@@ -47,7 +47,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Offer> GetAll()
         {
-            return DbContext.Offers.Where(o=>o.IsActive).ToList(); //asnotracking
+            return DbContext.Offers.Where(o => o.IsActive).ToList(); //asnotracking
         }
 
         public ICollection<Offer> GetArticlesLessOrMore((int lowerBound, int upperBound) range)

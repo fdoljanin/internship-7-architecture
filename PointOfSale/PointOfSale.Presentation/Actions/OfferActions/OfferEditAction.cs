@@ -22,6 +22,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             var isNotBlank = true;
             var offerList = _offerRepository.GetAll();
             PrintHelpers.PrintOfferList(offerList);
+            if (offerList.Count == 0) return;
 
             Console.WriteLine("Enter offer index:");
             var offerToEdit = ReadHelpers.TryGetListMember(offerList, ref isNotBlank);

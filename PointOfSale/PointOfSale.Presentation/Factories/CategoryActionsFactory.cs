@@ -16,16 +16,20 @@ namespace PointOfSale.Presentation.Factories
                 new CategoryAddAction(RepositoryFactory.GetRepository<CategoryRepository>()),
                 new CategoryEditAction(RepositoryFactory.GetRepository<CategoryRepository>()),
                 new CategoryDeleteAction(RepositoryFactory.GetRepository<CategoryRepository>()),
+                new OfferCategoryListAction(
+                    RepositoryFactory.GetRepository<OfferCategoryRepository>(),
+                    RepositoryFactory.GetRepository<CategoryRepository>()
+                    ),
                 new OfferCategoryAddAction(
                     RepositoryFactory.GetRepository<OfferCategoryRepository>(),
                     RepositoryFactory.GetRepository<CategoryRepository>(),
                     RepositoryFactory.GetRepository<OfferRepository>()
-                ),
+                    ),
                 new OfferCategoryDeleteAction(
                     RepositoryFactory.GetRepository<OfferCategoryRepository>(),
                     RepositoryFactory.GetRepository<CategoryRepository>(),
                     RepositoryFactory.GetRepository<OfferRepository>()
-                ),
+                    ),
                 new ExitMenuAction()
             };
 

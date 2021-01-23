@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PointOfSale.Data.Entities;
 
 namespace PointOfSale.Data.Migrations
 {
     [DbContext(typeof(PointOfSaleDbContext))]
-    partial class PointOfSaleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210123183525_Add PersonDelete")]
+    partial class AddPersonDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

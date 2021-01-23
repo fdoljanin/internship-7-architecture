@@ -16,6 +16,12 @@ namespace PointOfSale.Presentation.Helpers
 
         public static void PrintOfferList(ICollection<Offer> offers)
         {
+            if (offers.Count == 0)
+            {
+                MessageHelpers.NotAvailable("No offers found!");
+                return;
+            }
+
             Console.WriteLine("TYPE\t\tNAME\t\tPRICE\t\tQUANTITY");
             for (var i = 0; i < offers.Count; ++i)
             {
@@ -32,6 +38,12 @@ namespace PointOfSale.Presentation.Helpers
         }
         public static void PrintPersonList<TPerson>(ICollection<TPerson> persons) where TPerson:Person
         {
+            if (persons.Count == 0)
+            {
+                MessageHelpers.NotAvailable($"Nobody to show!");
+                return;
+            }
+
             Console.Write("PIN\t\tNAME \t\t\t");
             if (persons.First() is Employee) Console.Write("WORK START\t\tWORK END");
             Console.WriteLine();
@@ -44,6 +56,12 @@ namespace PointOfSale.Presentation.Helpers
 
         public static void PrintCategories(ICollection<Category> categories)
         {
+            if (categories.Count == 0)
+            {
+                MessageHelpers.NotAvailable("No categories found!");
+                return;
+            }
+
             Console.WriteLine("CATEGORY NAME");
             for (var i = 0; i < categories.Count; ++i)
             {
@@ -58,6 +76,12 @@ namespace PointOfSale.Presentation.Helpers
 
         public static void PrintBills(ICollection<Bill> bills)
         {
+            if (bills.Count == 0)
+            {
+                MessageHelpers.NotAvailable("No bills found!");
+                return;
+            }
+
             Console.WriteLine("TYPE\t\t\tDATE\t\t\t\tCOST");
             for (var i = 1; i <= bills.Count; ++i)
             {
@@ -73,6 +97,12 @@ namespace PointOfSale.Presentation.Helpers
 
         public static void PrintSubscriptions(ICollection<SubscriptionBill> subscriptionBills)
         {
+            if (subscriptionBills.Count == 0)
+            {
+                MessageHelpers.NotAvailable("No subscriptions found!");
+                return;
+            }
+
             Console.WriteLine("OFFER NAME\t\t\tCUSTOMER PIN\t\t\tSTART DATE");
             for (var i = 1; i <= subscriptionBills.Count; ++i)
             {

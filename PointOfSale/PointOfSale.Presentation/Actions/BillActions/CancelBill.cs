@@ -19,9 +19,10 @@ namespace PointOfSale.Presentation.Actions.BillActions
         {
             var doesContinue = true;
             var billList = _billRepository.GetBills();
-
             Console.WriteLine("Choose bill index to delete");
             PrintHelpers.PrintBills(billList);
+            if (billList.Count == 0) return;
+
 
             var chosenBill = ReadHelpers.TryGetListMember(billList, ref doesContinue);
             if (!doesContinue) return;

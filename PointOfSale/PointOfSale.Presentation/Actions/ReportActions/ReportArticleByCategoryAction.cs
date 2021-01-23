@@ -1,6 +1,7 @@
 ﻿using System;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Helpers;
 
 namespace PointOfSale.Presentation.Actions.ReportActions
 {
@@ -17,6 +18,11 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         public void Call()
         {
             var countGrouped = _articleBillRepository.GetCountByCategory();
+            if (countGrouped.Count == 0)
+            {
+                MessageHelpers.NotAvailable("Nothing to show.");
+                return;
+            }
 
             Console.WriteLine("NAME\t\tCOUNT");
             foreach (var categoryCount in countGrouped)

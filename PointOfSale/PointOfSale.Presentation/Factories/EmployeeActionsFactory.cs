@@ -15,6 +15,7 @@ namespace PointOfSale.Presentation.Factories
             {
                 new EmployeeAddAction(RepositoryFactory.GetRepository<EmployeeRepository>()),
                 new EmployeeEditAction(RepositoryFactory.GetRepository<EmployeeRepository>()),
+                new EmployeeDeleteAction(RepositoryFactory.GetRepository<EmployeeRepository>()),
                 new ExitMenuAction()
             };
 

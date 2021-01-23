@@ -24,6 +24,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
                 var duration = ReadHelpers.TryIntParse(ref doesContinue, 1, 23);
                 if (!doesContinue) return;
 
+                Console.WriteLine("Enter starting time:");
                 var input = ReadHelpers.TryGetInput(ref doesContinue);
                 var doesParse = DateTime.TryParse(input, out var date);
                 if (!doesParse || date.Hour + duration > 23)

@@ -16,7 +16,7 @@ namespace PointOfSale.Domain.Repositories
 
         public bool IsStringUnique(string pin)
         {
-            return !DbContext.Employees.Any(e => e.Pin == pin);
+            return !DbContext.Employees.Any(e => e.Pin == pin && !e.isRemoved);
         }
 
         public void Add(Employee employee)
@@ -40,18 +40,28 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Employee> GetAll()
         {
-            return DbContext.Employees.ToList();
+            return DbContext.Employees.Where(e => !e.isRemoved).ToList();
         }
 
 
         public ICollection<Employee> GetAllAvailable(DateTime start, int duration)
         {
             var end = start.AddHours(duration);
-            return DbContext.Employees.Include(e => e.ServiceBills)
+            return DbContext.Employees
+                .Include(e => e.ServiceBills)
+                .Where(e => !e.isRemoved)
                 .Where(e => e.WorkStart <= start.Hour && e.WorkEnd * 60 >= end.Hour*60 + end.Minute)
                 .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || 
                                                      start > sb.StartTime.AddHours(sb.Duration)))
                 .ToList();
+        }
+
+        public void Delete(int employeeId)
+        {
+            var employeeDb = DbContext.Employees.Find(employeeId);
+            employeeDb.isRemoved = true;
+            
+            SaveChanges();
         }
     }
 }

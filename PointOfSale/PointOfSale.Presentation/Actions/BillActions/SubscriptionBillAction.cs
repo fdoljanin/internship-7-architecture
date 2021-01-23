@@ -22,15 +22,23 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var doesContinue = true;
             var customerList = _customerRepository.GetAll();
             PrintHelpers.PrintPersonList(customerList);
+            if (customerList.Count == 0) return;
 
             Console.WriteLine("Enter customer index:");
             var customer = ReadHelpers.TryGetListMember(customerList, ref doesContinue);
             if (!doesContinue) return; 
 
-            var price = _billRepository.GetSubscriptionBill(customer.Id);
+            var billCost = _billRepository.GetSubscriptionBill(customer.Id);
+
+            if (billCost == 0)
+            {
+                MessageHelpers.Error("No subscriptions found!");
+                Console.ReadLine();
+                return;
+            }
 
             MessageHelpers.Success("Bill created!");
-            Console.WriteLine($"Price: {price}");
+            Console.WriteLine($"Cost: {billCost}");
             Console.ReadLine();
         }
     }

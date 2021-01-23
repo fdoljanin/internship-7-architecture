@@ -26,13 +26,15 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var doesContinue = true;
             var categoryList = _categoryRepository.GetAll();
             PrintHelpers.PrintCategories(categoryList);
+            if (categoryList.Count == 0) return;
 
-            Console.WriteLine("Enter index of category to delete elements from:");
+            Console.WriteLine("Enter index of category to delete offers from:");
             var category = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
 
             var offersInside = _offerCategoryRepository.GetOfferList(category.Id, true).ToList();
             PrintHelpers.PrintOfferList(offersInside);
+            if (offersInside.Count == 0) return;
 
             while (true)
             {

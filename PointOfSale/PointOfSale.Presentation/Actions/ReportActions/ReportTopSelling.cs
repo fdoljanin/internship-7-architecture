@@ -20,6 +20,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
         public void Call()
         {
             var topSelling = _offerRepository.GetTopSell(10);
+
             foreach (var topSell in topSelling)
             {
                 topSell.Offer.Quantity = topSell.Quantity;

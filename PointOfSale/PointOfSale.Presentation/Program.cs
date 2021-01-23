@@ -10,6 +10,7 @@ namespace PointOfSale.Presentation
     {
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             SoundHelper.Play(Sounds.Startup);
 
             var mainMenuActions = MainMenuFactory.GetMainMenuActions();

@@ -26,19 +26,21 @@ namespace PointOfSale.Presentation.Actions.BillActions
         public void Call()
         {
             var doesContinue = true;
-            var newBill = _billRepository.GetNewBill(BillType.Service);
             var serviceList = _serviceBillRepository.GetAll();
 
             var serviceBill = new ServiceBill();
             PrintHelpers.PrintOfferList(serviceList);
+            if (serviceList.Count == 0) return;
 
             Console.WriteLine("Enter service index:");
-            serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
+            var chosenService = ReadHelpers.TryGetListMember(serviceList, ref doesContinue);
             if (!doesContinue) return;
 
             var serviceBillInfo = ServiceBillHelpers.TryGetServiceInfo(_employeeRepository, ref doesContinue);
             if (!doesContinue) return;
 
+            var newBill = _billRepository.GetNewBill(BillType.Service);
+            serviceBill.OfferId = chosenService.Id;
             serviceBill.StartTime = serviceBillInfo.StartTime;
             serviceBill.Duration = serviceBillInfo.Duration;
             serviceBill.EmployeeId = serviceBillInfo.EmployeeId;

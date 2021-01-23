@@ -44,6 +44,12 @@ namespace PointOfSale.Domain.Repositories
             }
 
             billDb.TransactionDate = DateTime.Now;
+
+            if (billDb.Cost == 0)
+            {
+                DbContext.Bills.Remove(billDb);
+            } 
+
             SaveChanges();
 
             return billDb.Cost;
@@ -72,6 +78,11 @@ namespace PointOfSale.Domain.Repositories
                 bill.Cost += subscription.Offer.Price *
                             ((bill.TransactionDate.Year - subscription.StartTime.Year) * 12 +
                                 bill.TransactionDate.Month - subscription.StartTime.Month + 1);
+            }
+
+            if (bill.Cost == 0)
+            {
+                DbContext.Bills.Remove(bill);
             }
 
             SaveChanges();

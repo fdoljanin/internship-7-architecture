@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Media;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,12 @@ namespace PointOfSale.Presentation.Helpers
         public static void Success(string message)
         {
             ColorText(message, ConsoleColor.Green);
+        }
+
+        public static void NotAvailable(string message)
+        {
+            Error(message);
+            Thread.Sleep(1500);
         }
 
     }

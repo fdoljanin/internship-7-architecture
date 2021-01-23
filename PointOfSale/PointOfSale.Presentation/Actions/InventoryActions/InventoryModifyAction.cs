@@ -24,6 +24,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
             var offerList = _offerRepository.GetAll().Where(o => o.Type != OfferType.Service).ToList();
 
             PrintHelpers.PrintOfferList(offerList);
+            if (offerList.Count == 0) return;
 
             while (true)
             {
