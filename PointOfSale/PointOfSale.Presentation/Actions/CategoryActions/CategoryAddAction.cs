@@ -2,6 +2,7 @@
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Domain.Repositories;
 using PointOfSale.Presentation.Abstractions;
+using PointOfSale.Presentation.Helpers;
 using PointOfSale.Presentation.Helpers.EntityReadHelpers;
 
 namespace PointOfSale.Presentation.Actions.CategoryActions
@@ -28,7 +29,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
             _categoryRepository.Add(category);
 
-            Console.WriteLine("Category added!");
+            MessageHelpers.Success("Category added!");
             Console.ReadLine();
         }
     }

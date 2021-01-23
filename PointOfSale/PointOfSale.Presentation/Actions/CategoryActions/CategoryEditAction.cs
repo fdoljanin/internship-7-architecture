@@ -32,6 +32,9 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             if (!isNotBlank) return;
 
             _categoryRepository.Edit(categoryToEdit.Id, categoryToEdit);
+
+            MessageHelpers.Success("Category edited!");
+            Console.ReadLine();
         }
     }
 }

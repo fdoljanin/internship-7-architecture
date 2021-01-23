@@ -45,7 +45,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
                 if (offer == null)
                 {
-                    Console.WriteLine("Offer is already there!");
+                    MessageHelpers.Error("Offer is already there!");
                     continue;
                 }
 
@@ -57,7 +57,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
                     }
                     );
 
-                Console.WriteLine("Added!");
+                MessageHelpers.Success("Added!");
                 offersOutside[offerIndex] = null;
             }
         }

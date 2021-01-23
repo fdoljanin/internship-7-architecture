@@ -1,5 +1,8 @@
-﻿using PointOfSale.Presentation.Extensions;
+﻿using System;
+using PointOfSale.Presentation.Extensions;
 using PointOfSale.Presentation.Factories;
+using System.Threading;
+using PointOfSale.Presentation.Helpers;
 
 namespace PointOfSale.Presentation
 {
@@ -7,8 +10,15 @@ namespace PointOfSale.Presentation
     {
         static void Main(string[] args)
         {
+            SoundHelper.Play(Sounds.Startup);
+
             var mainMenuActions = MainMenuFactory.GetMainMenuActions();
             mainMenuActions.PrintActionsAndCall();
+
+            Console.Clear();
+            Console.WriteLine("Logging off...");
+            SoundHelper.Play(Sounds.Shutdown);
+            Thread.Sleep(1500);
         }
     }
 }

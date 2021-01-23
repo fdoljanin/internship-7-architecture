@@ -22,7 +22,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
                 var doesParse = DateTime.TryParse(input, out var date);
                 if (!doesParse || date.Hour + lengthInHours > 23)
                 {
-                    Console.WriteLine("Enter valid date! Enter for quit");
+                    MessageHelpers.Error("Enter valid date! Enter for quit");
                     continue;
                 }
                 
@@ -30,7 +30,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 
                 if (availableEmployees.Count > 0) return (date, availableEmployees);
 
-                Console.WriteLine("No available employees! Enter for quit");
+                MessageHelpers.Error("No available employees! Enter for quit");
             }
         }
 

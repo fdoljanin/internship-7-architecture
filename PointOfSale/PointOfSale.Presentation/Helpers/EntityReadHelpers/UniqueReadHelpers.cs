@@ -12,7 +12,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
                 var inputString = ReadHelpers.TryGetInput(ref doesContinue);
                 var unique = repositoryToCheck.IsStringUnique(inputString);
                 if (unique || !doesContinue) return inputString;
-                Console.WriteLine("It should be unique!");
+                MessageHelpers.Error("It should be unique!");
             }
         }
 
@@ -22,7 +22,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
             {
                 var pin = TryGetUniqueString(repositoryToCheck, ref doesContinue);
                 if (ReadHelpers.IsPinValid(pin) || !doesContinue) return pin;
-                Console.WriteLine("Pin should consist of digits!");
+                MessageHelpers.Error("Pin should consist of digits!");
             }
         }
     }

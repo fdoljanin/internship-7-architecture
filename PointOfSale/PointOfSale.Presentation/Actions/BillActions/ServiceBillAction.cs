@@ -33,9 +33,9 @@ namespace PointOfSale.Presentation.Actions.BillActions
             PrintHelpers.PrintOfferList(serviceList);
 
             Console.WriteLine("Enter service index:");
-
             serviceBill.OfferId = ReadHelpers.TryGetListMember(serviceList, ref doesContinue).Id;
             if (!doesContinue) return;
+
             var serviceBillInfo = ServiceBillHelpers.TryGetServiceInfo(_employeeRepository, ref doesContinue);
             if (!doesContinue) return;
 
@@ -44,9 +44,11 @@ namespace PointOfSale.Presentation.Actions.BillActions
             serviceBill.EmployeeId = serviceBillInfo.EmployeeId;
             serviceBill.BillId = newBill.Id;
             _serviceBillRepository.Add(serviceBill);
-            Console.WriteLine("Service added!");
+            Console.WriteLine("Service added!\n");
 
             var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
+
+            MessageHelpers.Success("Bill created!");
             Console.WriteLine($"Cost: {billCost}");
             Console.ReadLine();
 

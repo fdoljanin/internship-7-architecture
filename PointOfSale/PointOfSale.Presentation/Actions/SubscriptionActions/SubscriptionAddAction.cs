@@ -46,6 +46,9 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
             subscriptionBill.StartTime = DateTime.Now;
 
             _subscriptionBillRepository.AddSubscription(subscriptionBill);
+
+            MessageHelpers.Success("Subscription added!");
+            Console.ReadLine();
         }
     }
 }

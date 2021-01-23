@@ -47,7 +47,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
 
             _offerRepository.Add(offer);
 
-            Console.WriteLine("Success!");
+            MessageHelpers.Success("Success!");
             Console.ReadLine();
         }
     }

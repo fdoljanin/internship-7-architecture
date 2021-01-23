@@ -35,6 +35,9 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
             if (!doesContinue) return;
 
             _customerRepository.Add(customer);
+
+            MessageHelpers.Success("Customer added!");
+            Console.ReadLine();
         }
     }
 }

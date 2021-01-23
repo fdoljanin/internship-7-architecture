@@ -29,10 +29,10 @@ namespace PointOfSale.Presentation.Actions.OfferActions
             if (ReadHelpers.Confirm($"Are you sure you want to delete {offerToDelete.Name}? (yes/no)"))
             {
                 _offerRepository.Delete(offerToDelete.Id);
-                Console.WriteLine("Offer deleted!");
+                MessageHelpers.Success("Offer deleted!");
             }
-            else 
-                Console.WriteLine("Action cancelled!");
+            else
+                MessageHelpers.Success("Action cancelled!");
 
             Console.ReadLine();
         }

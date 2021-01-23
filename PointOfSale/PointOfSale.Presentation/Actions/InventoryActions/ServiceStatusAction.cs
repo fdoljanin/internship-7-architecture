@@ -28,7 +28,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
                 var doesParse = DateTime.TryParse(input, out var date);
                 if (!doesParse || date.Hour + duration > 23)
                 {
-                    Console.WriteLine("Enter valid datetime!");
+                    MessageHelpers.Error("Enter valid datetime!");
                     continue;
                 }
                 if (!doesContinue) return;

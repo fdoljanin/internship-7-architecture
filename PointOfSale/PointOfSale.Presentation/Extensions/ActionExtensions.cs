@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Actions;
+using PointOfSale.Presentation.Helpers;
 
 namespace PointOfSale.Presentation.Extensions
 {
@@ -34,7 +35,7 @@ namespace PointOfSale.Presentation.Extensions
                     var action = actions.FirstOrDefault(a => a.MenuIndex == actionIndex);
                     if (action == null)
                     {
-                        Console.WriteLine("Please select available action");
+                        MessageHelpers.Error("Select available action!");
                         Thread.Sleep(1000);
                         Console.Clear();
                     }
@@ -48,7 +49,7 @@ namespace PointOfSale.Presentation.Extensions
                 }
                 else
                 {
-                    Console.WriteLine("Please type in number.");
+                    MessageHelpers.Error("Type in number!");
                     Thread.Sleep(1000);
                     Console.Clear();
                 }

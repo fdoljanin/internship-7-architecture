@@ -43,14 +43,14 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
                 if (_articleBillRepository.CheckIsArticleThere(newBill.Id, articleBill))
                 {
-                    Console.WriteLine("Article already in! Quantity added...");
+                    MessageHelpers.ColorText("Article already in! Quantity added...", ConsoleColor.Yellow);
                     continue;
                 }
 
                 articleBill.BillId = newBill.Id;
                 _articleBillRepository.Add(articleBill);
 
-                Console.WriteLine("Article added!");
+                Console.WriteLine("Article added!\n");
             }
 
             var serviceList = _serviceBillRepository.GetAll();
@@ -74,11 +74,12 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 serviceBill.BillId = newBill.Id;
                 _serviceBillRepository.Add(serviceBill);
 
-                Console.WriteLine("Service added!");
+                Console.WriteLine("Service added!\n");
             }
 
             var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
 
+            MessageHelpers.Success("Bill created!");
             Console.WriteLine($"Cost: {billCost}");
             Console.ReadLine();
         }

@@ -42,7 +42,7 @@ namespace PointOfSale.Presentation.Actions.CustomerActions
 
             _customerRepository.Edit(customerToEdit.Id, customerEdited);
 
-            Console.WriteLine("Customer edited!");
+            MessageHelpers.Success("Customer edited!");
             Console.ReadLine();
         }
     }

@@ -16,7 +16,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
                 if (!doesContinue) return (default, default);
                 if (!input.Contains('x'))
                 {
-                    Console.WriteLine("Quantity is missing!");
+                    MessageHelpers.Error("Quantity is missing!");
                     continue;
                 }
 
@@ -27,7 +27,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
                 doesParse &= int.TryParse(indexInput, out var index);
 
                 if (doesParse && quantity > 0 && index > 0 && index <= maxIndex) return (index-1, quantity);
-                Console.WriteLine("Please enter valid numbers!");
+                MessageHelpers.Error("Please enter valid numbers!");
             }
         }
 
@@ -50,7 +50,7 @@ namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
                     return articleBill;
                 }
 
-                Console.WriteLine("Article not available in that quantity!");
+                MessageHelpers.Error("Article not available in that quantity!");
             }
         }
     }

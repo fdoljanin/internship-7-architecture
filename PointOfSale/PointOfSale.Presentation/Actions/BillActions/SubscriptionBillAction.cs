@@ -28,6 +28,8 @@ namespace PointOfSale.Presentation.Actions.BillActions
             if (!doesContinue) return; 
 
             var price = _billRepository.GetSubscriptionBill(customer.Id);
+
+            MessageHelpers.Success("Bill created!");
             Console.WriteLine($"Price: {price}");
             Console.ReadLine();
         }

@@ -38,7 +38,7 @@ namespace PointOfSale.Presentation.Actions.OfferActions
 
             _offerRepository.Edit(offerToEdit.Id, offerToEdit);
 
-            Console.WriteLine("Offer edited!");
+            MessageHelpers.Success("Offer edited!");
             Console.ReadLine();
         }
     }

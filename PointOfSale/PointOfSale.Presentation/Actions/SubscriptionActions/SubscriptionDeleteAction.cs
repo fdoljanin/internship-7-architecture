@@ -25,11 +25,16 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
             var chosenSubscription = ReadHelpers.TryGetListMember(activeSubscriptions, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to cancel subscription?")) return;
+            if (!ReadHelpers.Confirm($"Are you sure you want to cancel subscription?"))
+            {
+                MessageHelpers.Success("Action stopped.");
+                Console.ReadLine();
+                return;
+            }
 
             _subscriptionBillRepository.CancelSubscription(chosenSubscription.Id);
 
-            Console.WriteLine("Cancelled!");
+            MessageHelpers.Success("Cancelled!");
             Console.ReadLine();
         }
     }

@@ -38,7 +38,7 @@ namespace PointOfSale.Presentation.Actions.InventoryActions
                 offer.Quantity = newQuantity;
                 _offerRepository.Edit(offer.Id, offer);
 
-                Console.WriteLine("Quantity modified!");
+                MessageHelpers.Success("Quantity modified!\n");
             }
         }
     }

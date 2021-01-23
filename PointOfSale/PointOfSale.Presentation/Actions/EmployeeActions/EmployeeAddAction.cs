@@ -40,7 +40,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
 
             _employeeRepository.Add(employee);
 
-            Console.WriteLine("Employee added!");
+            MessageHelpers.Success("Employee added!");
             Console.ReadLine();
         }
     }

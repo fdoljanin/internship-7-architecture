@@ -46,7 +46,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
 
             _employeeRepository.Edit(employeeToEdit.Id, employeeEdited);
 
-            Console.WriteLine("Employee edited!");
+            MessageHelpers.Success("Employee edited!");
             Console.ReadLine();
         }
     }

@@ -7,12 +7,6 @@ namespace PointOfSale.Presentation.Helpers
 {
     public static class ReadHelpers
     {
-        public static bool DoesContinue(out string input)
-        {
-            input = Console.ReadLine().Trim();
-            return input != "";
-        }
-
         public static string TryGetInput(ref bool doesContinue)
         {
             var input = Console.ReadLine().Trim();
@@ -28,7 +22,7 @@ namespace PointOfSale.Presentation.Helpers
                 var doesParse = int.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound || number > upperBound))
                 {
-                    Console.WriteLine("Input not valid!");
+                    MessageHelpers.Error("Input not valid!");
                     continue;
                 }
                 return number;
@@ -42,7 +36,7 @@ namespace PointOfSale.Presentation.Helpers
                 var doesParse = decimal.TryParse(input, out var number);
                 if (doesContinue && (!doesParse || number < lowerBound))
                 {
-                    Console.WriteLine("Input not valid!");
+                    MessageHelpers.Error("Input not valid!");
                     continue;
                 }
                 return number;
@@ -59,7 +53,7 @@ namespace PointOfSale.Presentation.Helpers
                 var doesParse = Enum.TryParse(typeof(TEnum), input.Capitalize(), out var result);
                 if (doesContinue && (!doesParse || int.TryParse(input, out _)))
                 {
-                    Console.WriteLine("Input not valid!");
+                    MessageHelpers.Error("Input not valid!");
                     continue;
                 }
                 return (TEnum) result;
@@ -68,11 +62,11 @@ namespace PointOfSale.Presentation.Helpers
 
         public static bool Confirm(string message)
         {
-            Console.WriteLine(message);
+            MessageHelpers.Confirm(message);
             var input = Console.ReadLine().Trim();
             if (input == "yes") return true;
             if (input == "no") return false;
-            Console.WriteLine("Input is not valid, choose yes/no!");
+            MessageHelpers.Error("Input is not valid, choose yes/no!");
             return Confirm(message);
         }
 
@@ -95,7 +89,7 @@ namespace PointOfSale.Presentation.Helpers
                 var hours = input.Split();
                 if (hours.Length != 2)
                 {
-                    Console.WriteLine("Please enter in right format!");
+                    MessageHelpers.Error("Please enter in right format!");
                     continue;
                 }
 
@@ -103,19 +97,19 @@ namespace PointOfSale.Presentation.Helpers
                 doesParse = int.TryParse(hours[1], out var workEnd);
                 if (!doesParse)
                 {
-                    Console.WriteLine("Please enter a number!");
+                    MessageHelpers.Error("Please enter a number!");
                     continue;
                 }
 
                 if (workStart < min || workEnd > max)
                 {
-                    Console.WriteLine("Hours not valid!");
+                    MessageHelpers.Error("Hours not valid!");
                     continue;
                 }
 
                 if (workEnd < workStart)
                 {
-                    Console.WriteLine("End should be after start!");
+                    MessageHelpers.Error("End should be after start!");
                     continue;
                 }
 
@@ -137,7 +131,7 @@ namespace PointOfSale.Presentation.Helpers
                     doesParse &= DateTime.TryParse(dates[1], out var end);
 
                     if (doesParse && start < end) return (start, end);
-                    Console.WriteLine("Enter valid dates!");
+                    MessageHelpers.Error("Enter valid dates!");
                     continue;
                 }
 
@@ -146,7 +140,7 @@ namespace PointOfSale.Presentation.Helpers
                     var doesParse = DateTime.TryParse(dates[0], out var start);
 
                     if (doesParse && start < DateTime.Now) return (start, DateTime.Now);
-                    Console.WriteLine("Enter valid date!");
+                    MessageHelpers.Error("Enter valid date!");
                 }
 
                 Console.WriteLine("Input not valid!");
@@ -164,13 +158,13 @@ namespace PointOfSale.Presentation.Helpers
 
                 if (!doesParse)
                 {
-                    Console.WriteLine("Enter a number!");
+                    MessageHelpers.Error("Enter a number!");
                     continue;
                 }
                 if (input[0] == '>') return (number, int.MaxValue);
                 if (input[0] == '<') return (int.MinValue, number);
 
-                Console.WriteLine("Input not valid!");
+                MessageHelpers.Error("Input not valid!");
             }
         }
 

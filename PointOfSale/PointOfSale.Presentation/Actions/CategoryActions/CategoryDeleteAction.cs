@@ -26,8 +26,16 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var categoryToDelete = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}?")) return;
+            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}?"))
+            {
+                MessageHelpers.Success("Action stopped.");
+                Console.ReadLine();
+                return;
+            }
+
             _categoryRepository.Delete(categoryToDelete.Id);
+            MessageHelpers.Success("Category deleted!");
+            Console.ReadLine();
         }
     }
 }

@@ -45,13 +45,13 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
                 if (offer == null)
                 {
-                    Console.WriteLine("Offer is already deleted!");
+                    MessageHelpers.Error("Offer is already deleted!");
                     continue;
                 }
 
                 _offerCategoryRepository.Delete(offer.Id, category.Id);
 
-                Console.WriteLine("Added!");
+                MessageHelpers.Success("Deleted!");
                 offersInside[offerIndex] = null;
             }
         }
