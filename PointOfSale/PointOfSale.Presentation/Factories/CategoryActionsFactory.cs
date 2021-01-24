@@ -22,14 +22,12 @@ namespace PointOfSale.Presentation.Factories
                     ),
                 new OfferCategoryAddAction(
                     RepositoryFactory.GetRepository<OfferCategoryRepository>(),
-                    RepositoryFactory.GetRepository<CategoryRepository>(),
-                    RepositoryFactory.GetRepository<OfferRepository>()
-                    ),
+                    RepositoryFactory.GetRepository<CategoryRepository>()
+                ),
                 new OfferCategoryDeleteAction(
                     RepositoryFactory.GetRepository<OfferCategoryRepository>(),
-                    RepositoryFactory.GetRepository<CategoryRepository>(),
-                    RepositoryFactory.GetRepository<OfferRepository>()
-                    ),
+                    RepositoryFactory.GetRepository<CategoryRepository>()
+                ),
                 new ExitMenuAction()
             };
 

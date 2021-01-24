@@ -6,7 +6,7 @@ namespace PointOfSale.Domain.Factories
 {
     public static class RepositoryFactory
     {
-        static private PointOfSaleDbContext _context { get; set; }
+        private static PointOfSaleDbContext _context { get; }
 
         static RepositoryFactory()
         {

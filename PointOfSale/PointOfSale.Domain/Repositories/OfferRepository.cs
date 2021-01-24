@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
 using PointOfSale.Data.Enums;
+using PointOfSale.Domain.Abstractions;
 using PointOfSale.Domain.Models;
-using PointOfSale.Domain.Repositories.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
@@ -47,7 +47,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Offer> GetAll()
         {
-            return DbContext.Offers.Where(o => o.IsActive).ToList(); //asnotracking
+            return DbContext.Offers.Where(o => o.IsActive).ToList();
         }
 
         public ICollection<Offer> GetArticlesLessOrMore((int lowerBound, int upperBound) range)

@@ -14,7 +14,7 @@ namespace PointOfSale.Presentation.Actions.ReportActions
             _articleBillRepository = articleBillRepository;
         }
         public int MenuIndex { get; set; }
-        public string Label { get; set; } = "Get article by category";
+        public string Label { get; set; } = "Get sold article count by category";
         public void Call()
         {
             var countGrouped = _articleBillRepository.GetCountByCategory();

@@ -27,7 +27,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var chosenBill = ReadHelpers.TryGetListMember(billList, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to delete bill? (yes/no) "))
+            if (!ReadHelpers.Confirm("Are you sure you want to delete bill? (yes/no)"))
             {
                 MessageHelpers.Success("Action stopped.");
                 Console.ReadLine();
@@ -36,7 +36,7 @@ namespace PointOfSale.Presentation.Actions.BillActions
 
             _billRepository.CancelBill(chosenBill.Id);
 
-            ReadHelpers.Confirm("Cancelled!");
+            MessageHelpers.Success("Cancelled!");
             Console.ReadLine();
         }
     }

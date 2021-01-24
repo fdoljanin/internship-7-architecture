@@ -1,5 +1,4 @@
-﻿using System;
-using PointOfSale.Domain.Repositories.Abstractions;
+﻿using PointOfSale.Domain.Abstractions;
 
 namespace PointOfSale.Presentation.Helpers.EntityReadHelpers
 {

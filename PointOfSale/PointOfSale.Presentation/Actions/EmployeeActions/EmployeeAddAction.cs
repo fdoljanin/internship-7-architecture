@@ -21,7 +21,7 @@ namespace PointOfSale.Presentation.Actions.EmployeeActions
         {
             var doesContinue = true;
             var employee = new Employee();
-;
+
             Console.WriteLine("Enter employee pin:");
             employee.Pin = UniqueReadHelpers.TryGetUniquePin(_employeeRepository, ref doesContinue);
             if (!doesContinue) return;

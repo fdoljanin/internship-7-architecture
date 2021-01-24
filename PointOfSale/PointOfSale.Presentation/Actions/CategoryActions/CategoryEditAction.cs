@@ -29,8 +29,8 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             if (!isNotBlank) return;
 
             Console.WriteLine($"Enter new category name, enter for default ({categoryToEdit.Name}):");
-            categoryToEdit.Name = UniqueReadHelpers.TryGetUniqueString(_categoryRepository, ref isNotBlank);
-            if (!isNotBlank) return;
+            var newName = UniqueReadHelpers.TryGetUniqueString(_categoryRepository, ref isNotBlank);
+            categoryToEdit.Name = isNotBlank ? newName : categoryToEdit.Name;
 
             _categoryRepository.Edit(categoryToEdit.Id, categoryToEdit);
 

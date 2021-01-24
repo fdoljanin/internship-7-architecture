@@ -9,7 +9,7 @@ namespace PointOfSale.Presentation.Helpers
     {
         public static string TryGetInput(ref bool doesContinue)
         {
-            var input = Console.ReadLine().Trim();
+            var input = Console.ReadLine()?.Trim();
             doesContinue = input != "";
             return input;
         }
@@ -67,7 +67,7 @@ namespace PointOfSale.Presentation.Helpers
         public static bool Confirm(string message)
         {
             MessageHelpers.Confirm(message);
-            var input = Console.ReadLine().Trim().ToLower();
+            var input = Console.ReadLine()?.Trim().ToLower();
             if (input == "yes") return true;
             if (input == "no") return false;
             MessageHelpers.Error("Input is not valid, choose yes/no!");
@@ -98,7 +98,7 @@ namespace PointOfSale.Presentation.Helpers
                 }
 
                 var doesParse = int.TryParse(hours[0], out var workStart);
-                doesParse = int.TryParse(hours[1], out var workEnd);
+                doesParse &= int.TryParse(hours[1], out var workEnd);
                 if (!doesParse)
                 {
                     MessageHelpers.Error("Please enter a number!");

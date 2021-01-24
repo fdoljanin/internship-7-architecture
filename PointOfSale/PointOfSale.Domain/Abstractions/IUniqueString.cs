@@ -1,4 +1,4 @@
-﻿namespace PointOfSale.Domain.Repositories.Abstractions
+﻿namespace PointOfSale.Domain.Abstractions
 {
     public interface IUniqueString
     {

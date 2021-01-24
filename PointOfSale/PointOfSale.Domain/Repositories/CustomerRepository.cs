@@ -3,7 +3,7 @@ using PointOfSale.Data.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using PointOfSale.Data.Entities.Models;
-using PointOfSale.Domain.Repositories.Abstractions;
+using PointOfSale.Domain.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
@@ -15,7 +15,7 @@ namespace PointOfSale.Domain.Repositories
 
         public bool IsStringUnique(string pin)
         {
-            return !DbContext.Customers.Any(c => c.Pin == pin && !c.isRemoved);
+            return !DbContext.Customers.Any(c => c.Pin == pin && !c.IsRemoved);
         }
 
         public void Add(Customer customer)
@@ -26,7 +26,7 @@ namespace PointOfSale.Domain.Repositories
 
         public void Edit(int id, Customer editedCustomer)
         {
-            var customerDb = DbContext.Customers.First(c => c.Id == id && !c.isRemoved);
+            var customerDb = DbContext.Customers.First(c => c.Id == id && !c.IsRemoved);
             customerDb.Pin = editedCustomer.Pin;
             customerDb.FirstName = editedCustomer.FirstName;
             customerDb.LastName = editedCustomer.LastName;
@@ -35,7 +35,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Customer> GetAll()
         {
-            return DbContext.Customers.Where(c => !c.isRemoved).ToList();
+            return DbContext.Customers.Where(c => !c.IsRemoved).ToList();
         }
 
         public bool CheckIsDeletable(int customerId)
@@ -49,7 +49,7 @@ namespace PointOfSale.Domain.Repositories
         public void Delete(int customerId)
         {
             var customerDb = DbContext.Customers.Find(customerId);
-            customerDb.isRemoved = true;
+            customerDb.IsRemoved = true;
 
             SaveChanges();
         }

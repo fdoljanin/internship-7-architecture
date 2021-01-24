@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using PointOfSale.Data.Entities.Models;
+using PointOfSale.Data.Seeds;
 
 namespace PointOfSale.Data.Entities
 {
@@ -22,6 +23,12 @@ namespace PointOfSale.Data.Entities
         public DbSet<ArticleBill> ArticleBills { get; set; }
         public DbSet<ServiceBill> ServiceBills { get; set; }
         public DbSet<SubscriptionBill> SubscriptionBills { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            DataBaseSeed.Seed(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
 
         public class StoreContextFactory : IDesignTimeDbContextFactory<PointOfSaleDbContext>
         {

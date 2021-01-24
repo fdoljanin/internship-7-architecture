@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using PointOfSale.Presentation.Abstractions;
 using PointOfSale.Presentation.Actions;
 using PointOfSale.Presentation.Helpers;

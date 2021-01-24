@@ -20,7 +20,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
 
         public void Call()
         {
-            bool doesContinue = true;
+            var doesContinue = true;
             var category = new Category();
             
             Console.WriteLine("Enter category name:");

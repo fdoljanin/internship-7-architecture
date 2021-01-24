@@ -2,7 +2,7 @@
 using PointOfSale.Data.Entities;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
-using PointOfSale.Domain.Repositories.Abstractions;
+using PointOfSale.Domain.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {

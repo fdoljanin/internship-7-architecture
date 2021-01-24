@@ -35,10 +35,11 @@ namespace PointOfSale.Presentation.Actions.BillActions
             var articleList = _articleBillRepository.GetAllAvailable();
             Console.WriteLine("Add articles:");
             PrintHelpers.PrintOfferList(articleList);
-            if (articleList.Count == 0) goto Service;
+            
 
-            while (true)
+            while (articleList.Count > 0)
             {
+                Console.WriteLine("Enter article id and amount separated by space, eg 2x4 (enter for stop):");
                 var articleBill = ArticleBillHelpers.TryGetArticleBill(articleList, ref doesContinue);
                 if (!doesContinue) break;
 
@@ -51,10 +52,9 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 articleBill.BillId = newBill.Id;
                 _articleBillRepository.Add(articleBill);
 
-                Console.WriteLine("Article added!\n");
+                Console.WriteLine("Article added!");
             }
 
-            Service:
             var serviceList = _serviceBillRepository.GetAll();
             Console.WriteLine("Add services:");
 
@@ -62,14 +62,9 @@ namespace PointOfSale.Presentation.Actions.BillActions
             {
                 var serviceBill = new ServiceBill();
                 PrintHelpers.PrintOfferList(serviceList);
-                if (serviceList.Count == 0) goto Bill;
-                if (serviceList.Count == 0)
-                {
-                    MessageHelpers.NotAvailable("No customers found!");
-                    return;
-                }
+                if (serviceList.Count == 0) break;
 
-                Console.WriteLine("Enter service index:");
+                Console.WriteLine("Enter service index (enter for stop):");
 
                 var chosenService = ReadHelpers.TryGetListMember(serviceList, ref doesContinue);
                 if (!doesContinue) break;
@@ -87,7 +82,6 @@ namespace PointOfSale.Presentation.Actions.BillActions
                 Console.WriteLine("Service added!\n");
             }
             
-            Bill:
             var billCost = _billRepository.FinishBillAndGetCost(newBill.Id);
 
             if (billCost == 0)

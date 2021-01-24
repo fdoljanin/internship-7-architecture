@@ -7,10 +7,10 @@ namespace PointOfSale.Presentation.Helpers
 {
     public static class PrintHelpers
     {
-        public static void PrintOffer(Offer offer)
+        private static void PrintOffer(Offer offer)
         {
             Console.Write($"{offer.Type}\t\t{offer.Name}\t\t{offer.Price}\t\t");
-            if (offer.Quantity != null) Console.Write(offer.Quantity);
+            if (offer.Quantity >= 0 && offer.Quantity != null) Console.Write(offer.Quantity);
             Console.WriteLine();
         }
 
@@ -30,7 +30,7 @@ namespace PointOfSale.Presentation.Helpers
             }
         }
 
-        public static void PrintPerson(Person person)
+        private static void PrintPerson(Person person)
         {
             Console.Write($"{person.Pin}\t\t{person.FirstName} {person.LastName}\t\t\t");
             if (person is Employee employee) Console.Write($"{employee.WorkStart}\t\t{employee.WorkEnd}");
@@ -40,7 +40,7 @@ namespace PointOfSale.Presentation.Helpers
         {
             if (persons.Count == 0)
             {
-                MessageHelpers.NotAvailable($"Nobody to show!");
+                MessageHelpers.NotAvailable("Nobody to show!");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace PointOfSale.Presentation.Helpers
             }
         }
 
-        public static void PrintBill(Bill bill)
+        private static void PrintBill(Bill bill)
         {
             Console.WriteLine($"{bill.Type}\t\t{bill.TransactionDate}\t\t{bill.Cost}");
         }
@@ -90,7 +90,7 @@ namespace PointOfSale.Presentation.Helpers
             }
         }
 
-        public static void PrintSubscription(SubscriptionBill subscriptionBill)
+        private static void PrintSubscription(SubscriptionBill subscriptionBill)
         {
             Console.WriteLine($"{subscriptionBill.Offer.Name}\t\t\t{subscriptionBill.Customer.Pin}\t\t\t{subscriptionBill.StartTime}");
         }

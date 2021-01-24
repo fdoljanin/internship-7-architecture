@@ -57,12 +57,11 @@ namespace PointOfSale.Domain.Repositories
 
         public decimal GetSubscriptionBill(int customerId)
         {
-            var customer = DbContext.Customers
-                .Include(c => c.SubscriptionBills
-                    .Where(sb => sb.BillId == null))
-                .ThenInclude(sb => sb.Offer)
-                .First(c => c.Id == customerId);
-            var bill = new Bill();
+            var customerSubscriptions = DbContext.SubscriptionBills
+                .Where(sb => sb.CustomerId == customerId && sb.BillId == null)
+                .ToList();
+
+            var bill = new Bill {Type = BillType.Subscription};
             DbContext.Bills.Add(bill);
 
             SaveChanges();
@@ -70,7 +69,7 @@ namespace PointOfSale.Domain.Repositories
             bill.Cost = 0;
             bill.TransactionDate = DateTime.Now;
 
-            foreach (var subscription in customer.SubscriptionBills)
+            foreach (var subscription in customerSubscriptions)
             {
                 subscription.BillId = bill.Id;
                 ++subscription.Offer.Quantity;
@@ -91,7 +90,9 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Bill> GetBills()
         {
-            return DbContext.Bills.Where(b => !b.Cancelled).ToList();
+            return DbContext.Bills.Where(b => !b.Cancelled)
+                .OrderBy(b => b.TransactionDate)
+                .ToList();
         }
 
         public void CancelBill(int billId)

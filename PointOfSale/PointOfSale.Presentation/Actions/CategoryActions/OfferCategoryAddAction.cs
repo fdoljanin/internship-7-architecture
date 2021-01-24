@@ -14,8 +14,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Add offer in category";
 
-        public OfferCategoryAddAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository, 
-            OfferRepository offerRepository)
+        public OfferCategoryAddAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository)
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;

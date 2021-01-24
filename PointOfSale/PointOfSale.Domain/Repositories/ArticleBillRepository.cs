@@ -62,7 +62,7 @@ namespace PointOfSale.Domain.Repositories
                 .Select(g => new CountByCategory()
                 {
                     Name = g.Key.Name,
-                    Count = g.Sum(g => g.Offer.ArticleBills.Sum(ab => ab.Quantity))
+                    Count = g.Sum(oc => oc.Offer.ArticleBills.Sum(ab => ab.Quantity))
                 })
                 .ToList();
         }

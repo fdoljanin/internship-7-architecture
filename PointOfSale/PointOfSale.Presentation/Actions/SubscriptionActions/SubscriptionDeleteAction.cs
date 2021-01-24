@@ -26,7 +26,7 @@ namespace PointOfSale.Presentation.Actions.SubscriptionActions
             var chosenSubscription = ReadHelpers.TryGetListMember(activeSubscriptions, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to cancel subscription?"))
+            if (!ReadHelpers.Confirm("Are you sure you want to cancel subscription? (yes/no)"))
             {
                 MessageHelpers.Success("Action stopped.");
                 Console.ReadLine();

@@ -14,8 +14,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
         public int MenuIndex { get; set; }
         public string Label { get; set; } = "Delete offer from category";
 
-        public OfferCategoryDeleteAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository,
-            OfferRepository offerRepository)
+        public OfferCategoryDeleteAction(OfferCategoryRepository offerCategoryRepository, CategoryRepository categoryRepository)
         {
             _offerCategoryRepository = offerCategoryRepository;
             _categoryRepository = categoryRepository;

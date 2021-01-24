@@ -27,7 +27,7 @@ namespace PointOfSale.Presentation.Actions.CategoryActions
             var categoryToDelete = ReadHelpers.TryGetListMember(categoryList, ref doesContinue);
             if (!doesContinue) return;
 
-            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}?"))
+            if (!ReadHelpers.Confirm($"Are you sure you want to delete category {categoryToDelete.Name}? (yes/no)"))
             {
                 MessageHelpers.Success("Action stopped.");
                 Console.ReadLine();

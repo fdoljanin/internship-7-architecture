@@ -4,7 +4,7 @@ using PointOfSale.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PointOfSale.Data.Entities.Models;
-using PointOfSale.Domain.Repositories.Abstractions;
+using PointOfSale.Domain.Abstractions;
 
 namespace PointOfSale.Domain.Repositories
 {
@@ -16,7 +16,7 @@ namespace PointOfSale.Domain.Repositories
 
         public bool IsStringUnique(string pin)
         {
-            return !DbContext.Employees.Any(e => e.Pin == pin && !e.isRemoved);
+            return !DbContext.Employees.Any(e => e.Pin == pin && !e.IsRemoved);
         }
 
         public void Add(Employee employee)
@@ -40,7 +40,7 @@ namespace PointOfSale.Domain.Repositories
 
         public ICollection<Employee> GetAll()
         {
-            return DbContext.Employees.Where(e => !e.isRemoved).ToList();
+            return DbContext.Employees.Where(e => !e.IsRemoved).ToList();
         }
 
 
@@ -49,7 +49,7 @@ namespace PointOfSale.Domain.Repositories
             var end = start.AddHours(duration);
             return DbContext.Employees
                 .Include(e => e.ServiceBills)
-                .Where(e => !e.isRemoved)
+                .Where(e => !e.IsRemoved)
                 .Where(e => e.WorkStart <= start.Hour && e.WorkEnd * 60 >= end.Hour*60 + end.Minute)
                 .Where(e => e.ServiceBills.All(sb => sb.StartTime > end || 
                                                      start > sb.StartTime.AddHours(sb.Duration)))
@@ -59,7 +59,7 @@ namespace PointOfSale.Domain.Repositories
         public void Delete(int employeeId)
         {
             var employeeDb = DbContext.Employees.Find(employeeId);
-            employeeDb.isRemoved = true;
+            employeeDb.IsRemoved = true;
             
             SaveChanges();
         }
